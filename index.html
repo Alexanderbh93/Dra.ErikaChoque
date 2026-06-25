@@ -1,0 +1,1356 @@
+<!DOCTYPE html>
+<html lang="es" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dra. Erika Magaly Choque | Especialista en Ortodoncia</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.0/chart.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/fontsource/fonts/inter@latest/latin-400-normal.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/fontsource/fonts/inter@latest/latin-600-normal.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/fontsource/fonts/inter@latest/latin-700-normal.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/fontsource/fonts/playfair-display@latest/latin-700-normal.css">
+    <style>
+        * { font-family: 'Inter', sans-serif; }
+        .font-serif { font-family: 'Playfair Display', serif; }
+        .gradient-primary { background: linear-gradient(135deg, #0e7490 0%, #155e75 50%, #164e63 100%); }
+        .gradient-accent { background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%); }
+        .text-gradient { background: linear-gradient(135deg, #0e7490, #06b6d4); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .glass { background: rgba(255,255,255,0.1); backdrop-filter: blur(10px); border: 1px solid rgba(255,255,255,0.2); }
+        .card-hover { transition: all 0.3s ease; }
+        .card-hover:hover { transform: translateY(-5px); box-shadow: 0 20px 40px rgba(0,0,0,0.1); }
+        .hero-overlay { background: linear-gradient(135deg, rgba(14,116,144,0.85) 0%, rgba(6,182,212,0.7) 100%); }
+        .fade-in { animation: fadeIn 0.6s ease-out; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+        .pulse-glow { animation: pulseGlow 2s infinite; }
+        @keyframes pulseGlow { 0%, 100% { box-shadow: 0 0 20px rgba(14,116,144,0.3); } 50% { box-shadow: 0 0 40px rgba(14,116,144,0.6); } }
+        .sidebar-active { background: linear-gradient(135deg, #0e7490, #06b6d4); color: white !important; }
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #f1f5f9; }
+        ::-webkit-scrollbar-thumb { background: #0e7490; border-radius: 4px; }
+        .stat-card { position: relative; overflow: hidden; }
+        .stat-card::before { content: ''; position: absolute; top: -50%; right: -50%; width: 100%; height: 100%; background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%); }
+        .admin-access-bar { background: linear-gradient(90deg, #f59e0b, #d97706); animation: shimmer 3s infinite; }
+        @keyframes shimmer { 0%, 100% { opacity: 1; } 50% { opacity: 0.9; } }
+        .modal-overlay { transition: opacity 0.3s; }
+        
+        /* Estilos específicos para el Odontograma */
+        .tooth-btn { transition: all 0.2s; }
+        .tooth-active { background-color: #fee2e2; border-color: #f87171; color: #b91c1c; }
+        .tooth-inactive { background-color: white; border-color: #e5e7eb; color: #4b5563; }
+        .tooth-inactive:hover { background-color: #ecfeff; border-color: #22d3ee; }
+    </style>
+</head>
+<body class="bg-gray-50">
+
+    <div id="publicSite">
+        <div id="publicPromoModal" class="hidden fixed inset-0 bg-black/80 z-[200] flex items-center justify-center p-4 modal-overlay" onclick="if(event.target===this) this.classList.add('hidden')">
+            <div class="relative max-w-md w-full fade-in">
+                <button onclick="document.getElementById('publicPromoModal').classList.add('hidden')" class="absolute -top-4 -right-4 bg-white text-gray-800 rounded-full w-8 h-8 flex items-center justify-center shadow-lg hover:bg-gray-200 z-10 font-bold"><i class="fas fa-times"></i></button>
+                <img id="promoImage" src="" class="w-full rounded-2xl shadow-2xl object-contain border-4 border-white">
+            </div>
+        </div>
+
+        <div class="admin-access-bar text-white py-3 px-4 text-center">
+            <div class="flex items-center justify-center gap-3 flex-wrap">
+                <i class="fas fa-user-shield"></i>
+                <span class="font-medium text-sm md:text-base">🔐 Sistema Conectado a Firebase Firestore</span>
+                <button onclick="showBackofficeLogin()" class="bg-white text-amber-700 px-4 py-1 rounded-full text-sm font-bold hover:bg-amber-50 transition">
+                    <i class="fas fa-sign-in-alt mr-1"></i> Entrar al Backoffice
+                </button>
+            </div>
+        </div>
+
+        <div class="bg-cyan-800 text-white py-2 text-sm">
+            <div class="max-w-7xl mx-auto px-4 flex justify-between items-center">
+                <div class="flex items-center gap-4">
+                    <span><i class="fas fa-phone mr-1"></i> +51 950 381 224</span>
+                    <span class="hidden md:inline"><i class="fas fa-map-marker-alt mr-1"></i> Urb. Magisterial Ⅱ J-10, Arequipa</span>
+                </div>
+                <div class="flex items-center gap-4">
+                    <span class="hidden md:inline"><i class="fas fa-clock mr-1"></i> Lun - Sáb: 9:00 - 19:00</span>
+                    <a href="#" onclick="showBackofficeLogin(); return false;" class="hover:text-cyan-200 transition"><i class="fas fa-lock mr-1"></i> Acceso Staff</a>
+                </div>
+            </div>
+        </div>
+
+        <nav class="bg-white shadow-md sticky top-0 z-50">
+            <div class="max-w-7xl mx-auto px-4">
+                <div class="flex justify-between items-center py-4">
+                    <div class="flex items-center gap-3">
+                        <div class="w-12 h-12 rounded-full gradient-primary flex items-center justify-center">
+                            <span class="text-white font-bold text-lg">EC</span>
+                        </div>
+                        <div>
+                            <h1 class="text-lg font-bold text-cyan-800 leading-tight">Dra. Erika Magaly Choque</h1>
+                            <p class="text-xs text-gray-500">Especialista en Ortodoncia</p>
+                        </div>
+                    </div>
+                    <div class="hidden lg:flex items-center gap-8">
+                        <a href="#inicio" class="text-gray-700 hover:text-cyan-700 transition font-medium">Inicio</a>
+                        <a href="#sobre-mi" class="text-gray-700 hover:text-cyan-700 transition font-medium">Sobre Mí</a>
+                        <a href="#servicios" class="text-gray-700 hover:text-cyan-700 transition font-medium">Servicios</a>
+                        <a href="#casos" class="text-gray-700 hover:text-cyan-700 transition font-medium">Casos de Éxito</a>
+                        <a href="#testimonios" class="text-gray-700 hover:text-cyan-700 transition font-medium">Testimonios</a>
+                        <a href="#contacto" class="text-gray-700 hover:text-cyan-700 transition font-medium">Contacto</a>
+                    </div>
+                    <div class="flex items-center gap-3">
+                        <a href="https://wa.me/51950381224" class="bg-green-500 text-white px-4 py-2 rounded-full hover:bg-green-600 transition flex items-center gap-2 text-sm font-medium">
+                            <i class="fab fa-whatsapp text-lg"></i>
+                            <span class="hidden sm:inline">Agendar Cita</span>
+                        </a>
+                        <button onclick="toggleMobileMenu()" class="lg:hidden text-gray-700">
+                            <i class="fas fa-bars text-xl"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <div id="mobileMenu" class="hidden lg:hidden bg-white border-t px-4 py-3">
+                <a href="#inicio" onclick="toggleMobileMenu()" class="block py-2 text-gray-700">Inicio</a>
+                <a href="#sobre-mi" onclick="toggleMobileMenu()" class="block py-2 text-gray-700">Sobre Mí</a>
+                <a href="#servicios" onclick="toggleMobileMenu()" class="block py-2 text-gray-700">Servicios</a>
+                <a href="#casos" onclick="toggleMobileMenu()" class="block py-2 text-gray-700">Casos de Éxito</a>
+                <a href="#testimonios" onclick="toggleMobileMenu()" class="block py-2 text-gray-700">Testimonios</a>
+                <a href="#contacto" onclick="toggleMobileMenu()" class="block py-2 text-gray-700">Contacto</a>
+            </div>
+        </nav>
+
+        <section id="inicio" class="relative min-h-[90vh] flex items-center gradient-primary overflow-hidden">
+            <div class="absolute inset-0 opacity-10">
+                <div class="absolute top-20 left-10 w-72 h-72 bg-white rounded-full blur-3xl"></div>
+                <div class="absolute bottom-20 right-10 w-96 h-96 bg-cyan-300 rounded-full blur-3xl"></div>
+            </div>
+            <div class="max-w-7xl mx-auto px-4 grid lg:grid-cols-2 gap-12 items-center relative z-10">
+                <div class="text-white fade-in">
+                    <div class="inline-block bg-white/20 backdrop-blur-sm rounded-full px-4 py-2 mb-6">
+                        <span class="text-sm font-medium"><i class="fas fa-star text-yellow-400 mr-1"></i> Tratamientos Personalizados</span>
+                    </div>
+                    <h2 class="text-4xl md:text-6xl font-bold leading-tight mb-6 font-serif">
+                        Tu Sonrisa Perfecta<br>
+                        <span class="text-cyan-200">Comienza Aquí</span>
+                    </h2>
+                    <p class="text-lg text-cyan-100 mb-8 max-w-lg">
+                        Con más de 8 años de experiencia en ortodoncia, la Dra. Erika Choque transforma sonrisas con tecnología de vanguardia y un trato humano excepcional.
+                    </p>
+                    <div class="flex flex-wrap gap-4">
+                        <a href="#contacto" class="bg-white text-cyan-800 px-8 py-4 rounded-full font-bold hover:bg-cyan-50 transition shadow-lg">
+                            <i class="fas fa-calendar-check mr-2"></i>Agenda tu Consulta Gratis
+                        </a>
+                        <a href="#servicios" class="border-2 border-white text-white px-8 py-4 rounded-full font-bold hover:bg-white/10 transition">
+                            <i class="fas fa-tooth mr-2"></i>Ver Tratamientos
+                        </a>
+                    </div>
+                </div>
+                <div class="flex justify-center fade-in">
+                    <div class="relative">
+                        <div class="w-80 h-80 md:w-96 md:h-96 rounded-full overflow-hidden border-8 border-white/30 pulse-glow">
+                            <img id="heroImage" src="https://image.qwenlm.ai/public_source/f954291f-4e9c-4121-86f4-4c068acdc587/1a499e650-9764-4b0c-aa0c-a4b091090b89.png" alt="Dra. Erika Magaly Choque" class="w-full h-full object-cover">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="py-8 bg-white border-b">
+            <div class="max-w-7xl mx-auto px-4">
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-6 text-center">
+                    <div class="flex flex-col items-center gap-2">
+                        <i class="fas fa-graduation-cap text-3xl text-cyan-700"></i>
+                        <span class="text-sm font-medium text-gray-600">Colegiada COP</span>
+                    </div>
+                    <div class="flex flex-col items-center gap-2">
+                        <i class="fas fa-certificate text-3xl text-cyan-700"></i>
+                        <span class="text-sm font-medium text-gray-600">Especialista Certificada</span>
+                    </div>
+                    <div class="flex flex-col items-center gap-2">
+                        <i class="fas fa-microscope text-3xl text-cyan-700"></i>
+                        <span class="text-sm font-medium text-gray-600">Tecnología Digital 3D</span>
+                    </div>
+                    <div class="flex flex-col items-center gap-2">
+                        <i class="fas fa-hand-holding-heart text-3xl text-cyan-700"></i>
+                        <span class="text-sm font-medium text-gray-600">Atención Personalizada</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="sobre-mi" class="py-20 bg-white">
+            <div class="max-w-7xl mx-auto px-4">
+                <div class="grid lg:grid-cols-2 gap-16 items-center">
+                    <div class="relative">
+                        <img id="aboutImage" src="https://image.qwenlm.ai/public_source/f954291f-4e9c-4121-86f4-4c068acdc587/1c1ad1173-b061-494b-b2d9-5ca5eb730b66.png" alt="Consultorio" class="rounded-3xl shadow-2xl w-full h-[500px] object-cover">
+                        <div class="absolute -bottom-6 -right-6 bg-cyan-700 text-white rounded-2xl p-6 shadow-xl">
+                            <div class="text-4xl font-bold">8+</div>
+                            <div class="text-cyan-200">Años de<br>Experiencia</div>
+                        </div>
+                    </div>
+                    <div>
+                        <span class="text-cyan-600 font-semibold text-sm uppercase tracking-wider">Conóceme</span>
+                        <h3 class="text-4xl font-bold text-gray-800 mt-2 mb-6 font-serif">Dra. Erika Magaly Choque</h3>
+                        <p class="text-gray-600 mb-4 leading-relaxed">
+                            Soy cirujana dentista con especialización en Ortodoncia y Ortopedia Maxilofacial. Mi pasión es transformar sonrisas y mejorar la calidad de vida de mis pacientes a través de tratamientos personalizados con la más alta tecnología disponible.
+                        </p>
+                        <div class="grid grid-cols-2 gap-4 mb-8">
+                            <div class="flex items-center gap-3">
+                                <div class="w-10 h-10 rounded-full bg-cyan-100 flex items-center justify-center">
+                                    <i class="fas fa-university text-cyan-700"></i>
+                                </div>
+                                <span class="text-sm text-gray-700">UNMSM - Lima</span>
+                            </div>
+                            <div class="flex items-center gap-3">
+                                <div class="w-10 h-10 rounded-full bg-cyan-100 flex items-center justify-center">
+                                    <i class="fas fa-award text-cyan-700"></i>
+                                </div>
+                                <span class="text-sm text-gray-700">Especialista COP</span>
+                            </div>
+                        </div>
+                        <a href="#contacto" class="inline-flex items-center gap-2 gradient-primary text-white px-6 py-3 rounded-full font-medium hover:shadow-lg transition">
+                            <i class="fas fa-calendar-alt"></i> Agenda tu Evaluación
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="servicios" class="py-20 bg-gray-50">
+            <div class="max-w-7xl mx-auto px-4">
+                <div class="text-center mb-16">
+                    <span class="text-cyan-600 font-semibold text-sm uppercase tracking-wider">Nuestros Tratamientos</span>
+                    <h3 class="text-4xl font-bold text-gray-800 mt-2 font-serif">Servicios de Ortodoncia</h3>
+                </div>
+                <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+                    <div class="bg-white rounded-3xl p-8 shadow-lg card-hover border border-gray-100">
+                        <div class="w-16 h-16 rounded-2xl gradient-primary flex items-center justify-center mb-6">
+                            <i class="fas fa-tooth text-white text-2xl"></i>
+                        </div>
+                        <h4 class="text-xl font-bold text-gray-800 mb-3">Brackets Metálicos</h4>
+                        <p class="text-gray-500 mb-4">El tratamiento clásico y más efectivo. Brackets de alta tecnología para resultados precisos.</p>
+                    </div>
+                    <div class="bg-white rounded-3xl p-8 shadow-lg card-hover border-2 border-cyan-500 relative">
+                        <div class="absolute -top-3 right-6 bg-yellow-400 text-cyan-900 text-xs font-bold px-3 py-1 rounded-full">MÁS POPULAR</div>
+                        <div class="w-16 h-16 rounded-2xl gradient-primary flex items-center justify-center mb-6">
+                            <i class="fas fa-gem text-white text-2xl"></i>
+                        </div>
+                        <h4 class="text-xl font-bold text-gray-800 mb-3">Brackets Estéticos</h4>
+                        <p class="text-gray-500 mb-4">Brackets de cerámica o zafiro que se mimetizan con tus dientes. Discreción y efectividad.</p>
+                    </div>
+                    <div class="bg-white rounded-3xl p-8 shadow-lg card-hover border border-gray-100">
+                        <div class="w-16 h-16 rounded-2xl gradient-primary flex items-center justify-center mb-6">
+                            <i class="fas fa-magic text-white text-2xl"></i>
+                        </div>
+                        <h4 class="text-xl font-bold text-gray-800 mb-3">Alineadores Invisibles</h4>
+                        <p class="text-gray-500 mb-4">Férulas transparentes removibles. La opción más estética y cómoda.</p>
+                    </div>
+                    <div class="bg-white rounded-3xl p-8 shadow-lg card-hover border border-gray-100">
+                        <div class="w-16 h-16 rounded-2xl gradient-primary flex items-center justify-center mb-6">
+                            <i class="fas fa-bolt text-white text-2xl"></i>
+                        </div>
+                        <h4 class="text-xl font-bold text-gray-800 mb-3">Brackets Autoligables</h4>
+                        <p class="text-gray-500 mb-4">Sistema de baja fricción que acelera el tratamiento. Menos citas y mayor comodidad.</p>
+                    </div>
+                    <div class="bg-white rounded-3xl p-8 shadow-lg card-hover border border-gray-100">
+                        <div class="w-16 h-16 rounded-2xl gradient-primary flex items-center justify-center mb-6">
+                            <i class="fas fa-child text-white text-2xl"></i>
+                        </div>
+                        <h4 class="text-xl font-bold text-gray-800 mb-3">Ortopedia Maxilar</h4>
+                        <p class="text-gray-500 mb-4">Tratamiento temprano para niños. Corrección de problemas de crecimiento facial y dental.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="casos" class="py-20 bg-white">
+            <div class="max-w-7xl mx-auto px-4">
+                <div class="text-center mb-16">
+                    <span class="text-cyan-600 font-semibold text-sm uppercase tracking-wider">Resultados Reales</span>
+                    <h3 class="text-4xl font-bold text-gray-800 mt-2 font-serif">Casos de Éxito</h3>
+                    <p class="text-gray-500 mt-4 max-w-2xl mx-auto">Mira las transformaciones reales de nuestros pacientes.</p>
+                </div>
+                <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8" id="publicCases">
+                    </div>
+            </div>
+        </section>
+
+        <section id="testimonios" class="py-20 gradient-primary">
+            <div class="max-w-7xl mx-auto px-4">
+                <div class="text-center mb-16">
+                    <span class="text-cyan-200 font-semibold text-sm uppercase tracking-wider">Testimonios</span>
+                    <h3 class="text-4xl font-bold text-white mt-2 font-serif">Lo Que Dicen Nuestros Pacientes</h3>
+                </div>
+                <div class="grid md:grid-cols-3 gap-8" id="publicTestimonials">
+                    </div>
+            </div>
+        </section>
+
+        <section id="contacto" class="py-20 bg-white">
+            <div class="max-w-7xl mx-auto px-4">
+                <div class="grid lg:grid-cols-2 gap-16">
+                    <div>
+                        <span class="text-cyan-600 font-semibold text-sm uppercase tracking-wider">Contáctanos</span>
+                        <h3 class="text-4xl font-bold text-gray-800 mt-2 mb-6 font-serif">Agenda tu Consulta de Evaluación</h3>
+                        <p class="text-gray-500 mb-8">Tu primera consulta es GRATIS. Evaluaremos tu caso y te presentaremos el mejor plan de tratamiento personalizado.</p>
+                        
+                        <div class="space-y-6">
+                            <div class="flex items-start gap-4">
+                                <div class="w-12 h-12 rounded-xl bg-cyan-100 flex items-center justify-center flex-shrink-0">
+                                    <i class="fas fa-map-marker-alt text-cyan-700"></i>
+                                </div>
+                                <div>
+                                    <h5 class="font-bold text-gray-800">Dirección</h5>
+                                    <p class="text-gray-500">Urb. Magisterial Ⅱ J-10, Arequipa 04013</p>
+                                </div>
+                            </div>
+                            <div class="flex items-start gap-4">
+                                <div class="w-12 h-12 rounded-xl bg-cyan-100 flex items-center justify-center flex-shrink-0">
+                                    <i class="fas fa-phone text-cyan-700"></i>
+                                </div>
+                                <div>
+                                    <h5 class="font-bold text-gray-800">Teléfono</h5>
+                                    <p class="text-gray-500">+51 950 381 224</p>
+                                </div>
+                            </div>
+                            
+                            <div class="w-full h-64 mt-6 rounded-2xl overflow-hidden shadow-sm border border-gray-100">
+                                <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d1913.7270842739774!2d-71.54946249458162!3d-16.40174458550158!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x91424b943e130a8d%3A0xc5e8ba28f2aa8027!2sDra.%20Erika%20Magaly%20Choque%20%7C%20Especialista%20en%20Ortodoncia!5e0!3m2!1ses!2spe!4v1782340653591!5m2!1ses!2spe" width="100%" height="100%" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="strict-origin-when-cross-origin"></iframe>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="bg-gray-50 rounded-3xl p-8 shadow-lg">
+                        <h4 class="text-xl font-bold text-gray-800 mb-6">Solicita tu Cita</h4>
+                        <form onsubmit="submitContactForm(event)">
+                            <div class="grid grid-cols-2 gap-4 mb-4">
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-1">Nombre *</label>
+                                    <input type="text" id="contactFirstName" required class="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-cyan-500 outline-none transition">
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-1">Apellido *</label>
+                                    <input type="text" id="contactLastName" required class="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-cyan-500 outline-none transition">
+                                </div>
+                            </div>
+                            <div class="mb-4">
+                                <label class="block text-sm font-medium text-gray-700 mb-1">Teléfono *</label>
+                                <input type="tel" id="contactPhone" required class="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-cyan-500 outline-none transition">
+                            </div>
+                            <div class="mb-4">
+                                <label class="block text-sm font-medium text-gray-700 mb-1">Email *</label>
+                                <input type="email" id="contactEmail" required class="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-cyan-500 outline-none transition">
+                            </div>
+                            <div class="mb-4">
+                                <label class="block text-sm font-medium text-gray-700 mb-1">Tratamiento de interés *</label>
+                                <select id="contactTreatment" required class="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-cyan-500 outline-none transition">
+                                    <option value="">Selecciona una opción</option>
+                                    <option>Brackets Metálicos</option>
+                                    <option>Brackets Estéticos</option>
+                                    <option>Alineadores Invisibles</option>
+                                    <option>Consulta General</option>
+                                </select>
+                            </div>
+                            <div class="mb-6">
+                                <label class="block text-sm font-medium text-gray-700 mb-1">Mensaje</label>
+                                <textarea id="contactMessage" rows="3" class="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-cyan-500 outline-none transition resize-none"></textarea>
+                            </div>
+                            <button type="submit" class="w-full gradient-primary text-white py-4 rounded-xl font-bold hover:shadow-lg transition">
+                                <i class="fas fa-paper-plane mr-2"></i>Enviar Solicitud
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <footer class="bg-gray-900 text-white py-16">
+            <div class="max-w-7xl mx-auto px-4 text-center">
+                <p>© <span id="currentYear"></span> Dra. Erika Magaly Choque. Todos los derechos reservados. | Arequipa, Perú</p>
+            </div>
+        </footer>
+
+        <a href="https://wa.me/51950381224" class="fixed bottom-6 right-6 w-16 h-16 bg-green-500 rounded-full flex items-center justify-center shadow-2xl hover:bg-green-600 transition z-50 hover:scale-110">
+            <i class="fab fa-whatsapp text-white text-3xl"></i>
+        </a>
+    </div>
+
+    <div id="loginModal" class="hidden fixed inset-0 bg-black/60 z-[100] flex items-center justify-center p-4 modal-overlay" onclick="if(event.target===this) hideLoginModal()">
+        <div class="bg-white rounded-3xl shadow-2xl max-w-md w-full p-8 fade-in">
+            <div class="text-center mb-8">
+                <div class="w-16 h-16 mx-auto rounded-full gradient-primary flex items-center justify-center mb-4">
+                    <i class="fas fa-lock text-white text-xl"></i>
+                </div>
+                <h3 class="text-2xl font-bold text-gray-800">Acceso Backoffice</h3>
+            </div>
+            <form onsubmit="handleLogin(event)">
+                <div class="mb-4">
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Usuario</label>
+                    <input type="text" id="loginUser" value="admin" class="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-cyan-500 outline-none" required>
+                </div>
+                <div class="mb-6">
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Contraseña</label>
+                    <input type="password" id="loginPass" value="admin123" class="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-cyan-500 outline-none" required>
+                </div>
+                <button type="submit" class="w-full gradient-primary text-white py-3 rounded-xl font-bold hover:shadow-lg transition">
+                    <i class="fas fa-sign-in-alt mr-2"></i>Ingresar
+                </button>
+                <button type="button" onclick="hideLoginModal()" class="w-full mt-3 text-gray-500 py-2 hover:text-gray-700 transition">Cancelar</button>
+            </form>
+        </div>
+    </div>
+
+    <div id="backoffice" class="hidden">
+        <div class="flex min-h-screen">
+            <aside id="adminSidebar" class="w-64 bg-gray-900 text-white fixed h-full overflow-y-auto z-40 -translate-x-full lg:translate-x-0 transition-transform duration-300">
+                <div class="p-6 border-b border-gray-700">
+                    <div class="flex items-center gap-3">
+                        <div class="w-10 h-10 rounded-full gradient-primary flex items-center justify-center">
+                            <span class="text-white font-bold text-sm">EC</span>
+                        </div>
+                        <div>
+                            <h5 class="font-bold text-sm">Backoffice</h5>
+                            <p class="text-xs text-gray-400">Dra. Erika Choque</p>
+                        </div>
+                    </div>
+                </div>
+                <nav class="p-4 space-y-1">
+                    <button onclick="showSection('dashboard')" class="sidebar-btn w-full flex items-center gap-3 px-4 py-3 rounded-xl text-gray-300 hover:bg-gray-800 transition text-sm sidebar-active" data-section="dashboard"><i class="fas fa-chart-line w-5"></i> Dashboard</button>
+                    <button onclick="showSection('messages')" class="sidebar-btn w-full flex items-center gap-3 px-4 py-3 rounded-xl text-gray-300 hover:bg-gray-800 transition text-sm relative" data-section="messages"><i class="fas fa-envelope w-5"></i> Mensajes <span id="messagesBadge" class="ml-auto bg-red-500 text-white text-xs rounded-full px-2 py-0.5 hidden">0</span></button>
+                    <button onclick="showSection('patients')" class="sidebar-btn w-full flex items-center gap-3 px-4 py-3 rounded-xl text-gray-300 hover:bg-gray-800 transition text-sm" data-section="patients"><i class="fas fa-users w-5"></i> Pacientes</button>
+                    <button onclick="showSection('history')" class="sidebar-btn w-full flex items-center gap-3 px-4 py-3 rounded-xl text-gray-300 hover:bg-gray-800 transition text-sm" data-section="history"><i class="fas fa-file-medical w-5"></i> Historial Clínico</button>
+                    <button onclick="showSection('budgets')" class="sidebar-btn w-full flex items-center gap-3 px-4 py-3 rounded-xl text-gray-300 hover:bg-gray-800 transition text-sm" data-section="budgets"><i class="fas fa-file-invoice-dollar w-5"></i> Presupuestos</button>
+                    <button onclick="showSection('finance')" class="sidebar-btn w-full flex items-center gap-3 px-4 py-3 rounded-xl text-gray-300 hover:bg-gray-800 transition text-sm" data-section="finance"><i class="fas fa-coins w-5"></i> Finanzas</button>
+                    
+                    <div class="px-4 py-2 mt-4 text-xs font-bold text-gray-500 uppercase tracking-wider">Gestión Web</div>
+                    
+                    <button onclick="showSection('gallery')" class="sidebar-btn w-full flex items-center gap-3 px-4 py-3 rounded-xl text-gray-300 hover:bg-gray-800 transition text-sm" data-section="gallery"><i class="fas fa-images w-5"></i> Galería / Fotos Web</button>
+                    <button onclick="showSection('testimonials')" class="sidebar-btn w-full flex items-center gap-3 px-4 py-3 rounded-xl text-gray-300 hover:bg-gray-800 transition text-sm" data-section="testimonials"><i class="fas fa-comments w-5"></i> Testimonios</button>
+                    <button onclick="showSection('promotions')" class="sidebar-btn w-full flex items-center gap-3 px-4 py-3 rounded-xl text-purple-400 hover:bg-gray-800 transition text-sm" data-section="promotions"><i class="fas fa-bullhorn w-5"></i> Promociones (Pop-ups)</button>
+
+                    <div class="border-t border-gray-700 my-4"></div>
+                    <button onclick="exitBackoffice()" class="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-red-400 hover:bg-gray-800 transition text-sm"><i class="fas fa-external-link-alt w-5"></i> Ver Sitio Web</button>
+                </nav>
+            </aside>
+
+            <main class="lg:ml-64 flex-1 bg-gray-100 min-h-screen">
+                <header class="bg-white shadow-sm px-8 py-4 flex justify-between items-center sticky top-0 z-30">
+                    <div class="flex items-center gap-3">
+                        <button onclick="toggleAdminSidebar()" class="lg:hidden text-gray-700"><i class="fas fa-bars text-xl"></i></button>
+                        <h2 class="text-xl font-bold text-gray-800" id="sectionTitle">Dashboard</h2>
+                    </div>
+                </header>
+
+                <section id="section-dashboard" class="p-8 fade-in">
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+                        <div class="stat-card bg-gradient-to-br from-cyan-500 to-cyan-700 rounded-2xl p-6 text-white">
+                            <p class="text-cyan-100 text-sm">Pacientes Activos</p><p class="text-3xl font-bold mt-1" id="stat-patients">0</p>
+                        </div>
+                        <div class="stat-card bg-gradient-to-br from-green-500 to-green-700 rounded-2xl p-6 text-white">
+                            <p class="text-green-100 text-sm">Ingresos Totales</p><p class="text-3xl font-bold mt-1" id="stat-income">S/ 0</p>
+                        </div>
+                        <div class="stat-card bg-gradient-to-br from-purple-500 to-purple-700 rounded-2xl p-6 text-white">
+                            <p class="text-purple-100 text-sm">Mensajes Nuevos</p><p class="text-3xl font-bold mt-1" id="stat-messages">0</p>
+                        </div>
+                        <div class="stat-card bg-gradient-to-br from-amber-500 to-amber-700 rounded-2xl p-6 text-white">
+                            <p class="text-amber-100 text-sm">Testimonios</p><p class="text-3xl font-bold mt-1" id="stat-testimonials">0</p>
+                        </div>
+                    </div>
+                    <div class="grid lg:grid-cols-2 gap-6">
+                        <div class="bg-white rounded-2xl p-6 shadow-sm">
+                            <h4 class="font-bold text-gray-800 mb-4">Últimos Pacientes</h4>
+                            <table class="w-full text-sm">
+                                <thead><tr class="text-left text-gray-500 border-b"><th class="pb-3">Paciente</th><th class="pb-3">Estado</th><th class="pb-3">Fecha</th></tr></thead>
+                                <tbody id="recentPatientsTable"></tbody>
+                            </table>
+                        </div>
+                    </div>
+                </section>
+
+                <section id="section-messages" class="p-8 hidden fade-in">
+                    <h3 class="text-lg font-bold text-gray-800 mb-6">Mensajes de la Web</h3>
+                    <div class="bg-white rounded-2xl shadow-sm overflow-hidden p-6" id="messagesList"></div>
+                </section>
+
+                <section id="section-patients" class="p-8 hidden fade-in">
+                    <div class="flex justify-between mb-4">
+                        <h3 class="text-lg font-bold text-gray-800">Pacientes</h3>
+                        <button onclick="showPatientForm()" class="gradient-primary text-white px-6 py-2 rounded-xl font-medium"><i class="fas fa-plus"></i> Nuevo Paciente</button>
+                    </div>
+                    <div class="bg-white rounded-2xl shadow-sm overflow-hidden">
+                        <table class="w-full text-sm">
+                            <thead><tr class="bg-gray-50 text-left text-gray-600"><th class="p-4">DNI</th><th class="p-4">Nombres</th><th class="p-4">Tratamiento</th><th class="p-4">Estado</th><th class="p-4">Acciones</th></tr></thead>
+                            <tbody id="patientsTableBody"></tbody>
+                        </table>
+                    </div>
+                </section>
+
+                <section id="section-history" class="p-8 hidden fade-in">
+                    <div class="flex justify-between mb-4">
+                        <h3 class="text-lg font-bold text-gray-800">Historial Clínico</h3>
+                        <button onclick="showHistoryForm()" class="gradient-primary text-white px-6 py-2 rounded-xl font-medium"><i class="fas fa-plus"></i> Nuevo Registro</button>
+                    </div>
+                    <div class="bg-white rounded-2xl shadow-sm overflow-hidden">
+                        <table class="w-full text-sm">
+                            <thead><tr class="bg-gray-50 text-left text-gray-600"><th class="p-4">Fecha</th><th class="p-4">Paciente</th><th class="p-4">Tratamiento</th><th class="p-4">Acciones</th></tr></thead>
+                            <tbody id="historyTableBody"></tbody>
+                        </table>
+                    </div>
+                </section>
+
+                <section id="section-budgets" class="p-8 hidden fade-in">
+                    <div class="flex justify-between mb-4">
+                        <h3 class="text-lg font-bold text-gray-800">Presupuestos</h3>
+                        <button onclick="showBudgetForm()" class="gradient-primary text-white px-6 py-2 rounded-xl font-medium"><i class="fas fa-plus"></i> Nuevo Presupuesto</button>
+                    </div>
+                    <div class="bg-white rounded-2xl shadow-sm overflow-hidden">
+                        <table class="w-full text-sm">
+                            <thead><tr class="bg-gray-50 text-left text-gray-600"><th class="p-4">Fecha</th><th class="p-4">Total</th><th class="p-4">Estado</th><th class="p-4">Acciones</th></tr></thead>
+                            <tbody id="budgetsTableBody"></tbody>
+                        </table>
+                    </div>
+                </section>
+
+                <section id="section-finance" class="p-8 hidden fade-in">
+                    <div class="flex justify-between mb-4">
+                        <h3 class="text-lg font-bold text-gray-800">Finanzas</h3>
+                        <button onclick="showTransactionForm()" class="gradient-primary text-white px-6 py-2 rounded-xl font-medium"><i class="fas fa-plus"></i> Nueva Transacción</button>
+                    </div>
+                    <div class="bg-white rounded-2xl shadow-sm overflow-hidden">
+                        <table class="w-full text-sm">
+                            <thead><tr class="bg-gray-50 text-left text-gray-600"><th class="p-3">Fecha</th><th class="p-3">Tipo</th><th class="p-3">Monto</th><th class="p-3">Categoría</th><th class="p-3">Acciones</th></tr></thead>
+                            <tbody id="transactionsTableBody"></tbody>
+                        </table>
+                    </div>
+                </section>
+
+                <section id="section-gallery" class="p-8 hidden fade-in">
+                    <div class="flex justify-between items-center mb-4">
+                        <div>
+                            <h3 class="text-lg font-bold text-gray-800">Imágenes Web</h3>
+                            <p class="text-xs text-gray-500">Sube imágenes desde tu PC para actualizar la página principal o Casos de Éxito.</p>
+                        </div>
+                        <button onclick="showGalleryForm()" class="gradient-primary text-white px-6 py-2 rounded-xl font-medium"><i class="fas fa-upload"></i> Subir Imagen</button>
+                    </div>
+                    <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4" id="galleryGrid"></div>
+                </section>
+
+                <section id="section-testimonials" class="p-8 hidden fade-in">
+                    <div class="flex justify-between mb-4">
+                        <h3 class="text-lg font-bold text-gray-800">Testimonios Web</h3>
+                        <button onclick="showTestimonialForm()" class="gradient-primary text-white px-6 py-2 rounded-xl font-medium"><i class="fas fa-plus"></i> Nuevo Testimonio</button>
+                    </div>
+                    <div class="bg-white rounded-2xl shadow-sm overflow-hidden">
+                        <table class="w-full text-sm">
+                            <thead><tr class="bg-gray-50 text-left text-gray-600"><th class="p-4">Paciente</th><th class="p-4">Testimonio</th><th class="p-4">Visible</th><th class="p-4">Acciones</th></tr></thead>
+                            <tbody id="testimonialsTableBody"></tbody>
+                        </table>
+                    </div>
+                </section>
+
+                <section id="section-promotions" class="p-8 hidden fade-in">
+                    <div class="flex justify-between items-center mb-4">
+                        <div>
+                            <h3 class="text-lg font-bold text-gray-800">Pop-ups y Promociones</h3>
+                            <p class="text-xs text-gray-500">Sube un diseño. Cuando marques una promo como 'Activa', le saltará a los pacientes al entrar a la web.</p>
+                        </div>
+                        <button onclick="showPromoForm()" class="bg-purple-600 hover:bg-purple-700 text-white px-6 py-2 rounded-xl font-medium transition"><i class="fas fa-bullhorn"></i> Nueva Promo</button>
+                    </div>
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" id="promosGrid"></div>
+                </section>
+            </main>
+        </div>
+    </div>
+
+    <div id="patientModal" class="hidden fixed inset-0 bg-black/60 z-[100] flex items-center justify-center p-4 modal-overlay" onclick="if(event.target===this) closeModal('patientModal')">
+        <div class="bg-white rounded-3xl shadow-2xl max-w-2xl w-full p-8 fade-in">
+            <h3 class="text-xl font-bold text-gray-800 mb-6" id="patientModalTitle">Paciente</h3>
+            <form onsubmit="savePatient(event)">
+                <input type="hidden" id="patientId">
+                <div class="grid grid-cols-2 gap-4 mb-4">
+                    <input type="text" id="pFirstName" placeholder="Nombres" required class="w-full px-4 py-2 rounded-xl border">
+                    <input type="text" id="pLastName" placeholder="Apellidos" required class="w-full px-4 py-2 rounded-xl border">
+                    <input type="text" id="pDni" placeholder="DNI" required class="w-full px-4 py-2 rounded-xl border">
+                    <input type="date" id="pBirthdate" class="w-full px-4 py-2 rounded-xl border">
+                    <input type="tel" id="pPhone" placeholder="Teléfono" class="w-full px-4 py-2 rounded-xl border">
+                    <input type="email" id="pEmail" placeholder="Email" class="w-full px-4 py-2 rounded-xl border">
+                    <input type="text" id="pAddress" placeholder="Dirección" class="w-full px-4 py-2 rounded-xl border">
+                    <select id="pTreatment" class="w-full px-4 py-2 rounded-xl border"><option>Brackets Metálicos</option><option>Brackets Estéticos</option><option>Alineadores Invisibles</option><option>Ortopedia Maxilar</option></select>
+                    <select id="pStatus" class="w-full px-4 py-2 rounded-xl border"><option>Activo</option><option>Completado</option></select>
+                </div>
+                <textarea id="pNotes" placeholder="Notas" rows="2" class="w-full px-4 py-2 rounded-xl border mb-4"></textarea>
+                <div class="flex gap-3">
+                    <button type="submit" class="flex-1 gradient-primary text-white py-3 rounded-xl font-bold">Guardar</button>
+                    <button type="button" onclick="closeModal('patientModal')" class="px-6 py-3 border rounded-xl">Cancelar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div id="historyModal" class="hidden fixed inset-0 bg-black/60 z-[100] flex items-center justify-center p-4 modal-overlay overflow-y-auto" onclick="if(event.target===this) closeModal('historyModal')">
+        <div class="bg-white rounded-3xl shadow-2xl max-w-3xl w-full p-8 fade-in my-8 max-h-[90vh] overflow-y-auto">
+            <h3 class="text-xl font-bold text-gray-800 mb-6">Historia Clínica y Odontograma</h3>
+            <form onsubmit="saveHistory(event)">
+                <input type="hidden" id="historyId">
+                <div class="grid grid-cols-2 gap-4 mb-4">
+                    <select id="hPatient" required class="w-full px-4 py-2 rounded-xl border"></select>
+                    <input type="date" id="hDate" required class="w-full px-4 py-2 rounded-xl border">
+                </div>
+
+                <div class="mb-6 col-span-2">
+                    <div class="flex justify-between items-center mb-2">
+                        <label class="block text-sm font-medium text-gray-700">Odontograma Inicial / Actual</label>
+                        <span class="text-xs text-cyan-600 bg-cyan-50 px-3 py-1 rounded-full border border-cyan-100"><i class="fas fa-tooth"></i> Click en la pieza para añadir notas</span>
+                    </div>
+                    <div class="bg-white p-6 rounded-xl border border-gray-200 overflow-x-auto shadow-inner">
+                        <div id="odontogramGrid" class="flex flex-col gap-6 min-w-max mx-auto w-fit"></div>
+                    </div>
+                    <input type="hidden" id="hOdontogramData" value="{}">
+                </div>
+
+                <textarea id="hDiagnosis" placeholder="Diagnóstico" required class="w-full px-4 py-2 rounded-xl border mb-4" rows="2"></textarea>
+                <textarea id="hPlan" placeholder="Plan de Tratamiento" required class="w-full px-4 py-2 rounded-xl border mb-4" rows="2"></textarea>
+                <select id="hStatus" class="w-full px-4 py-2 rounded-xl border mb-6"><option>En Curso</option><option>Completado</option></select>
+                <div class="flex gap-3">
+                    <button type="submit" class="flex-1 gradient-primary text-white py-3 rounded-xl font-bold">Guardar Historia</button>
+                    <button type="button" onclick="closeModal('historyModal')" class="px-6 py-3 border border-gray-300 text-gray-600 rounded-xl hover:bg-gray-50">Cancelar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div id="budgetModal" class="hidden fixed inset-0 bg-black/60 z-[100] flex items-center justify-center p-4 modal-overlay" onclick="if(event.target===this) closeModal('budgetModal')">
+        <div class="bg-white rounded-3xl shadow-2xl max-w-2xl w-full p-8 fade-in">
+            <h3 class="text-xl font-bold text-gray-800 mb-6">Presupuesto</h3>
+            <form onsubmit="saveBudget(event)">
+                <input type="hidden" id="budgetId">
+                <div class="grid grid-cols-2 gap-4 mb-4">
+                    <select id="bPatient" required class="w-full px-4 py-2 rounded-xl border"></select>
+                    <input type="date" id="bDate" required class="w-full px-4 py-2 rounded-xl border">
+                </div>
+                <input type="number" id="bTotal" placeholder="Total a pagar (S/)" required class="w-full px-4 py-2 rounded-xl border mb-4">
+                <select id="bStatus" class="w-full px-4 py-2 rounded-xl border mb-4"><option>Pendiente</option><option>Pagado</option></select>
+                <div class="flex gap-3">
+                    <button type="submit" class="flex-1 gradient-primary text-white py-3 rounded-xl font-bold">Guardar Presupuesto</button>
+                    <button type="button" onclick="closeModal('budgetModal')" class="px-6 py-3 border rounded-xl">Cancelar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div id="galleryModal" class="hidden fixed inset-0 bg-black/60 z-[100] flex items-center justify-center p-4 modal-overlay" onclick="if(event.target===this) closeModal('galleryModal')">
+        <div class="bg-white rounded-3xl shadow-2xl max-w-2xl w-full p-8 fade-in">
+            <h3 class="text-xl font-bold text-gray-800 mb-6">Actualizar Imagen Web</h3>
+            <form onsubmit="saveGalleryImage(event)">
+                <input type="hidden" id="gId">
+                <input type="hidden" id="gBase64">
+                <input type="text" id="gTitle" placeholder="Título o Nombre del Paciente" required class="w-full px-4 py-2 rounded-xl border mb-4">
+                <select id="gCategory" class="w-full px-4 py-2 rounded-xl border mb-4">
+                    <option value="Inicio (Principal)">Foto Principal de Inicio</option>
+                    <option value="Sobre Mí">Foto Sección Sobre Mí</option>
+                    <option value="Caso de Éxito">Nuevo Caso de Éxito</option>
+                </select>
+                <div class="mb-4 border-2 border-dashed border-gray-300 rounded-xl p-6 text-center hover:bg-gray-50 transition cursor-pointer" onclick="document.getElementById('gFile').click()">
+                    <i class="fas fa-cloud-upload-alt text-3xl text-cyan-600 mb-2"></i>
+                    <p class="text-sm font-medium text-gray-700" id="gFileName">Click para subir foto desde tu PC</p>
+                    <input type="file" id="gFile" accept="image/*" class="hidden" onchange="handleImageUpload(event, 'gFileName', 'gBase64', 800)">
+                </div>
+                <div class="flex gap-3 mt-6">
+                    <button type="submit" class="flex-1 gradient-primary text-white py-3 rounded-xl font-bold">Guardar Imagen</button>
+                    <button type="button" onclick="closeModal('galleryModal')" class="px-6 py-3 border rounded-xl">Cancelar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div id="promoModal" class="hidden fixed inset-0 bg-black/60 z-[100] flex items-center justify-center p-4 modal-overlay" onclick="if(event.target===this) closeModal('promoModal')">
+        <div class="bg-white rounded-3xl shadow-2xl max-w-2xl w-full p-8 fade-in">
+            <h3 class="text-xl font-bold text-gray-800 mb-6">Promoción / Pop-up</h3>
+            <form onsubmit="savePromo(event)">
+                <input type="hidden" id="prId">
+                <input type="hidden" id="prBase64">
+                <input type="text" id="prTitle" placeholder="Nombre de la Promo (Ej: Descuento Brackets Verano)" required class="w-full px-4 py-2 rounded-xl border mb-4">
+                <div class="mb-4 border-2 border-dashed border-purple-300 rounded-xl p-6 text-center hover:bg-purple-50 transition cursor-pointer" onclick="document.getElementById('prFile').click()">
+                    <i class="fas fa-image text-3xl text-purple-600 mb-2"></i>
+                    <p class="text-sm font-medium text-gray-700" id="prFileName">Sube tu diseño promocional (Recomendado formato vertical/cuadrado)</p>
+                    <input type="file" id="prFile" accept="image/*" class="hidden" onchange="handleImageUpload(event, 'prFileName', 'prBase64', 600)">
+                </div>
+                <div class="flex items-center gap-3 mb-6 bg-purple-50 p-4 rounded-xl border border-purple-100">
+                    <label class="relative inline-flex items-center cursor-pointer">
+                        <input type="checkbox" id="prActive" class="sr-only peer" checked>
+                        <div class="w-11 h-6 bg-gray-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-purple-600"></div>
+                        <span class="ml-3 text-sm font-bold text-purple-900">Activar Promo</span>
+                    </label>
+                </div>
+                <div class="flex gap-3">
+                    <button type="submit" class="flex-1 bg-purple-600 hover:bg-purple-700 text-white py-3 rounded-xl font-bold transition">Guardar Promo</button>
+                    <button type="button" onclick="closeModal('promoModal')" class="px-6 py-3 border rounded-xl">Cancelar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div id="testimonialModal" class="hidden fixed inset-0 bg-black/60 z-[100] flex items-center justify-center p-4 modal-overlay" onclick="if(event.target===this) closeModal('testimonialModal')">
+        <div class="bg-white rounded-3xl shadow-2xl max-w-2xl w-full p-8 fade-in">
+            <h3 class="text-xl font-bold text-gray-800 mb-6">Testimonio</h3>
+            <form onsubmit="saveTestimonial(event)">
+                <input type="hidden" id="tId">
+                <input type="text" id="tName" placeholder="Nombre" required class="w-full px-4 py-2 rounded-xl border mb-4">
+                <input type="text" id="tTreatment" placeholder="Tratamiento" required class="w-full px-4 py-2 rounded-xl border mb-4">
+                <textarea id="tText" placeholder="Testimonio" required class="w-full px-4 py-2 rounded-xl border mb-4"></textarea>
+                <div class="grid grid-cols-2 gap-4 mb-4">
+                    <select id="tRating" class="w-full px-4 py-2 rounded-xl border"><option value="5">5 Estrellas</option><option value="4">4 Estrellas</option></select>
+                    <select id="tVisible" class="w-full px-4 py-2 rounded-xl border"><option value="true">Visible</option><option value="false">Oculto</option></select>
+                </div>
+                <div class="flex gap-3">
+                    <button type="submit" class="flex-1 gradient-primary text-white py-3 rounded-xl font-bold">Guardar Testimonio</button>
+                    <button type="button" onclick="closeModal('testimonialModal')" class="px-6 py-3 border rounded-xl">Cancelar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div id="transactionModal" class="hidden fixed inset-0 bg-black/60 z-[100] flex items-center justify-center p-4 modal-overlay" onclick="if(event.target===this) closeModal('transactionModal')">
+        <div class="bg-white rounded-3xl shadow-2xl max-w-2xl w-full p-8 fade-in">
+            <h3 class="text-xl font-bold text-gray-800 mb-6">Transacción</h3>
+            <form onsubmit="saveTransaction(event)">
+                <input type="hidden" id="txId">
+                <div class="grid grid-cols-2 gap-4 mb-4">
+                    <select id="txType" class="w-full px-4 py-2 rounded-xl border"><option value="income">Ingreso</option><option value="expense">Gasto</option></select>
+                    <input type="date" id="txDate" required class="w-full px-4 py-2 rounded-xl border">
+                </div>
+                <input type="text" id="txDescription" placeholder="Descripción" required class="w-full px-4 py-2 rounded-xl border mb-4">
+                <input type="number" id="txAmount" placeholder="Monto" required step="0.01" class="w-full px-4 py-2 rounded-xl border mb-4">
+                <select id="txCategory" class="w-full px-4 py-2 rounded-xl border mb-4"><option>Tratamiento Ortodoncia</option><option>Materiales</option><option>Otros</option></select>
+                <div class="flex gap-3">
+                    <button type="submit" class="flex-1 gradient-primary text-white py-3 rounded-xl font-bold">Guardar Transacción</button>
+                    <button type="button" onclick="closeModal('transactionModal')" class="px-6 py-3 border rounded-xl">Cancelar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div id="toast" class="hidden fixed top-6 right-6 bg-green-500 text-white px-6 py-3 rounded-xl shadow-2xl z-[200] flex items-center gap-3 fade-in">
+        <i class="fas fa-check-circle"></i><span id="toastMessage">Operación exitosa</span>
+    </div>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+        import { getFirestore, collection, addDoc, getDocs, updateDoc, deleteDoc, doc, onSnapshot } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+
+        // Configuración real de Firebase
+        const firebaseConfig = {
+            apiKey: "AIzaSyAyxf5QGIUULFO03-1qHkvAhF8EVAE_s3E",
+            authDomain: "draerikachoque-web.firebaseapp.com",
+            projectId: "draerikachoque-web",
+            storageBucket: "draerikachoque-web.firebasestorage.app",
+            messagingSenderId: "77346797540",
+            appId: "1:77346797540:web:533583bf797b4596f3b9f1"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        window.db = getFirestore(app);
+        
+        window.fbCollection = collection;
+        window.fbAddDoc = addDoc;
+        window.fbGetDocs = getDocs;
+        window.fbUpdateDoc = updateDoc;
+        window.fbDeleteDoc = deleteDoc;
+        window.fbDoc = doc;
+        window.fbOnSnapshot = onSnapshot;
+
+        // Listeners Públicos en Tiempo Real
+        window.listenPublicTestimonials = function() {
+            onSnapshot(collection(window.db, "testimonials"), (snapshot) => {
+                const container = document.getElementById('publicTestimonials');
+                let html = '';
+                snapshot.forEach(doc => {
+                    const t = doc.data();
+                    if(t.visible) {
+                        html += `
+                        <div class="bg-white/10 backdrop-blur-sm rounded-2xl p-6 border border-white/20">
+                            <div class="flex items-center gap-1 mb-4 text-yellow-400">
+                                ${'<i class="fas fa-star"></i>'.repeat(t.rating)}
+                            </div>
+                            <p class="text-white mb-6 italic">"${t.text}"</p>
+                            <div class="flex items-center gap-3">
+                                <div class="w-10 h-10 rounded-full bg-cyan-300 flex items-center justify-center text-cyan-800 font-bold">${t.name.charAt(0)}</div>
+                                <div><p class="text-white font-medium">${t.name}</p><p class="text-cyan-200 text-xs">${t.treatment}</p></div>
+                            </div>
+                        </div>`;
+                    }
+                });
+                container.innerHTML = html || '<p class="text-cyan-100 text-center col-span-3">Próximamente testimonios</p>';
+            });
+        };
+
+        window.listenPublicImagesAndCases = function() {
+            onSnapshot(collection(window.db, "gallery"), (snapshot) => {
+                const container = document.getElementById('publicCases');
+                let htmlCases = '';
+                
+                snapshot.forEach(doc => {
+                    const img = doc.data();
+                    // Modificadores directos de página web
+                    if (img.category === 'Inicio (Principal)') {
+                        document.getElementById('heroImage').src = img.url;
+                    } 
+                    else if (img.category === 'Sobre Mí') {
+                        document.getElementById('aboutImage').src = img.url;
+                    } 
+                    // Galeria de Casos
+                    else if (img.category === 'Caso de Éxito') {
+                        htmlCases += `
+                        <div class="rounded-3xl overflow-hidden shadow-lg card-hover bg-white">
+                            <img src="${img.url}" alt="${img.title}" class="w-full h-64 object-cover">
+                            <div class="p-6">
+                                <h5 class="font-bold text-gray-800">${img.title}</h5>
+                            </div>
+                        </div>`;
+                    }
+                });
+                container.innerHTML = htmlCases || '<p class="text-gray-500 text-center col-span-3">Próximamente casos de éxito</p>';
+            });
+        };
+
+        window.listenPublicPromos = function() {
+            onSnapshot(collection(window.db, "promotions"), (snapshot) => {
+                let activePromo = null;
+                snapshot.forEach(doc => {
+                    if (doc.data().active) activePromo = doc.data();
+                });
+                
+                // Si hay promo activa y no se ha mostrado en esta sesión, mostramos el modal
+                if (activePromo && !sessionStorage.getItem('promoVisto')) {
+                    document.getElementById('promoImage').src = activePromo.url;
+                    document.getElementById('publicPromoModal').classList.remove('hidden');
+                    sessionStorage.setItem('promoVisto', 'true');
+                }
+            });
+        }
+
+        // Iniciar listeners al cargar
+        window.listenPublicTestimonials();
+        window.listenPublicImagesAndCases();
+        window.listenPublicPromos();
+    </script>
+
+    <script>
+        document.getElementById('currentYear').textContent = new Date().getFullYear();
+
+        // --- COMPRESOR Y LECTOR DE IMÁGENES LOCALES A BASE64 ---
+        window.handleImageUpload = function(event, labelId, hiddenInputId, maxWidth) {
+            const file = event.target.files[0];
+            if (!file) return;
+            
+            document.getElementById(labelId).textContent = "Procesando imagen: " + file.name + "...";
+            
+            const reader = new FileReader();
+            reader.readAsDataURL(file);
+            reader.onload = (e) => {
+                const img = new Image();
+                img.src = e.target.result;
+                img.onload = () => {
+                    const canvas = document.createElement('canvas');
+                    let width = img.width;
+                    let height = img.height;
+                    
+                    if (width > maxWidth) {
+                        height *= maxWidth / width;
+                        width = maxWidth;
+                    }
+                    
+                    canvas.width = width;
+                    canvas.height = height;
+                    const ctx = canvas.getContext('2d');
+                    ctx.drawImage(img, 0, 0, width, height);
+                    
+                    // Comprimir a JPEG 70% calidad para cuidar Firestore
+                    const base64Str = canvas.toDataURL('image/jpeg', 0.7);
+                    document.getElementById(hiddenInputId).value = base64Str;
+                    document.getElementById(labelId).innerHTML = `<span class="text-green-600"><i class="fas fa-check"></i> Imagen lista para subir</span>`;
+                };
+            };
+        }
+
+        // --- UI HELPERS ---
+        function showToast(message, type = 'success') {
+            const toast = document.getElementById('toast');
+            document.getElementById('toastMessage').textContent = message;
+            toast.className = `fixed top-6 right-6 ${type === 'success' ? 'bg-green-500' : 'bg-red-500'} text-white px-6 py-3 rounded-xl shadow-2xl z-[200] flex items-center gap-3 fade-in`;
+            toast.classList.remove('hidden');
+            setTimeout(() => toast.classList.add('hidden'), 3000);
+        }
+        function closeModal(id) { document.getElementById(id).classList.add('hidden'); }
+        function toggleMobileMenu() { document.getElementById('mobileMenu').classList.toggle('hidden'); }
+        function toggleAdminSidebar() { document.getElementById('adminSidebar').classList.toggle('-translate-x-full'); }
+        function showBackofficeLogin() { document.getElementById('loginModal').classList.remove('hidden'); }
+        function hideLoginModal() { document.getElementById('loginModal').classList.add('hidden'); }
+
+        function handleLogin(e) {
+            e.preventDefault();
+            const user = document.getElementById('loginUser').value;
+            const pass = document.getElementById('loginPass').value;
+            if (user === 'admin' && pass === 'admin123') { 
+                hideLoginModal();
+                document.getElementById('publicSite').classList.add('hidden');
+                document.getElementById('backoffice').classList.remove('hidden');
+                showSection('dashboard');
+                showToast('Bienvenida, Dra. Erika');
+                window.scrollTo(0, 0);
+            } else {
+                showToast('Credenciales incorrectas', 'error');
+            }
+        }
+        function exitBackoffice() {
+            document.getElementById('backoffice').classList.add('hidden');
+            document.getElementById('publicSite').classList.remove('hidden');
+            window.scrollTo(0, 0);
+        }
+
+        function showSection(section) {
+            document.querySelectorAll('[id^="section-"]').forEach(s => s.classList.add('hidden'));
+            document.getElementById(`section-${section}`).classList.remove('hidden');
+            document.querySelectorAll('.sidebar-btn').forEach(btn => btn.classList.remove('sidebar-active'));
+            const btn = document.querySelector(`[data-section="${section}"]`);
+            if (btn) btn.classList.add('sidebar-active');
+
+            if (section === 'dashboard') loadDashboard();
+            if (section === 'messages') loadMessages();
+            if (section === 'patients') loadPatients();
+            if (section === 'history') loadHistory();
+            if (section === 'budgets') loadBudgets();
+            if (section === 'gallery') loadGallery();
+            if (section === 'promotions') loadPromotions();
+            if (section === 'testimonials') loadTestimonialsAdmin();
+            if (section === 'finance') loadFinance();
+        }
+
+        // --- LECTURA/ESCRITURA FIREBASE ---
+        async function fetchCollection(collectionName) {
+            try {
+                const snap = await window.fbGetDocs(window.fbCollection(window.db, collectionName));
+                return snap.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+            } catch(e) { console.error("Firebase error", e); return []; }
+        }
+        async function deleteDoc(collection, id) {
+            if(!confirm('¿Seguro de eliminar este registro?')) return;
+            await window.fbDeleteDoc(window.fbDoc(window.db, collection, id));
+            showToast('Eliminado correctamente');
+            if(collection==='patients') loadPatients();
+            if(collection==='histories') loadHistory();
+            if(collection==='budgets') loadBudgets();
+            if(collection==='gallery') loadGallery();
+            if(collection==='promotions') loadPromotions();
+            if(collection==='testimonials') loadTestimonialsAdmin();
+            if(collection==='transactions') loadFinance();
+        }
+
+        // --- DASHBOARD ---
+        async function loadDashboard() {
+            const patients = await fetchCollection('patients');
+            const transactions = await fetchCollection('transactions');
+            const messages = await fetchCollection('messages');
+            const testimonials = await fetchCollection('testimonials');
+
+            document.getElementById('stat-patients').textContent = patients.length;
+            document.getElementById('stat-messages').textContent = messages.length;
+            document.getElementById('stat-testimonials').textContent = testimonials.length;
+            
+            const monthIncome = transactions.filter(t => t.type === 'income').reduce((sum, t) => sum + Number(t.amount), 0);
+            document.getElementById('stat-income').textContent = `S/ ${monthIncome.toFixed(2)}`;
+
+            document.getElementById('recentPatientsTable').innerHTML = patients.slice(0, 5).map(p => `
+                <tr class="border-b border-gray-100">
+                    <td class="py-3">${p.firstName} ${p.lastName}</td>
+                    <td class="py-3">${p.status}</td>
+                    <td class="py-3 text-gray-500 text-xs">${p.createdAt}</td>
+                </tr>
+            `).join('');
+        }
+
+        // --- PACIENTES & DESCARGO LEGAL ---
+        // (La función generateWaiverPDF se inicializó arriba en module)
+
+        async function loadPatients() {
+            const patients = await fetchCollection('patients');
+            document.getElementById('patientsTableBody').innerHTML = patients.map(p => `
+                <tr class="border-b border-gray-100 hover:bg-gray-50">
+                    <td class="p-4 font-mono text-gray-500">${p.dni}</td>
+                    <td class="p-4 font-medium">${p.firstName} ${p.lastName}</td>
+                    <td class="p-4 text-gray-500">${p.treatment}</td>
+                    <td class="p-4"><span class="px-2 py-1 rounded-full text-xs bg-cyan-100 text-cyan-800">${p.status}</span></td>
+                    <td class="p-4">
+                        <button onclick="editPatient('${p.id}')" class="text-cyan-600 mr-2"><i class="fas fa-edit"></i></button>
+                        <button onclick="deleteDoc('patients', '${p.id}')" class="text-red-500"><i class="fas fa-trash"></i></button>
+                    </td>
+                </tr>
+            `).join('');
+        }
+        function showPatientForm() {
+            document.getElementById('patientId').value = '';
+            document.getElementById('pFirstName').value = '';
+            document.getElementById('pLastName').value = '';
+            document.getElementById('pDni').value = '';
+            document.getElementById('patientModal').classList.remove('hidden');
+        }
+        async function editPatient(id) {
+            const patients = await fetchCollection('patients');
+            const p = patients.find(x => x.id === id);
+            document.getElementById('patientId').value = p.id;
+            document.getElementById('pFirstName').value = p.firstName;
+            document.getElementById('pLastName').value = p.lastName;
+            document.getElementById('pDni').value = p.dni;
+            document.getElementById('pBirthdate').value = p.birthdate || '';
+            document.getElementById('pPhone').value = p.phone || '';
+            document.getElementById('pEmail').value = p.email || '';
+            document.getElementById('pAddress').value = p.address || '';
+            document.getElementById('pTreatment').value = p.treatment;
+            document.getElementById('pStatus').value = p.status;
+            document.getElementById('pNotes').value = p.notes || '';
+            document.getElementById('patientModal').classList.remove('hidden');
+        }
+        async function savePatient(e) {
+            e.preventDefault();
+            const id = document.getElementById('patientId').value;
+            const data = {
+                firstName: document.getElementById('pFirstName').value,
+                lastName: document.getElementById('pLastName').value,
+                dni: document.getElementById('pDni').value,
+                birthdate: document.getElementById('pBirthdate').value,
+                phone: document.getElementById('pPhone').value,
+                email: document.getElementById('pEmail').value,
+                address: document.getElementById('pAddress').value,
+                treatment: document.getElementById('pTreatment').value,
+                status: document.getElementById('pStatus').value,
+                notes: document.getElementById('pNotes').value,
+                updatedAt: new Date().toISOString()
+            };
+            if(id) {
+                await window.fbUpdateDoc(window.fbDoc(window.db, 'patients', id), data);
+                showToast('Paciente actualizado');
+            } else {
+                data.createdAt = new Date().toISOString().split('T')[0];
+                await window.fbAddDoc(window.fbCollection(window.db, 'patients'), data);
+                showToast('Nuevo paciente guardado. Generando PDF legal...');
+                window.generateWaiverPDF(data.firstName, data.lastName, data.dni);
+            }
+            closeModal('patientModal');
+            loadPatients();
+        }
+
+        // --- ODONTOGRAMA DINÁMICO & HISTORIAL ---
+        let currentOdontogram = {};
+        function renderOdontogram() {
+            const grid = document.getElementById('odontogramGrid');
+            const upperRight = [18, 17, 16, 15, 14, 13, 12, 11];
+            const upperLeft  = [21, 22, 23, 24, 25, 26, 27, 28];
+            const lowerRight = [48, 47, 46, 45, 44, 43, 42, 41];
+            const lowerLeft  = [31, 32, 33, 34, 35, 36, 37, 38];
+            const createRow = (rightQuadrant, leftQuadrant) => {
+                let html = '<div class="flex justify-center items-center gap-1 sm:gap-2">';
+                html += '<div class="flex gap-1 border-r-2 border-gray-400 pr-2">';
+                rightQuadrant.forEach(tooth => html += createToothBtn(tooth));
+                html += '</div><div class="flex gap-1 pl-2">';
+                leftQuadrant.forEach(tooth => html += createToothBtn(tooth));
+                html += '</div></div>';
+                return html;
+            };
+            grid.innerHTML = createRow(upperRight, upperLeft) + '<div class="w-full h-[2px] bg-gray-400 my-2"></div>' + createRow(lowerRight, lowerLeft);
+        }
+        function createToothBtn(toothNum) {
+            const hasNotes = currentOdontogram[toothNum] && currentOdontogram[toothNum].trim() !== "";
+            const bgClass = hasNotes ? 'tooth-active' : 'tooth-inactive';
+            return `
+                <button type="button" onclick="handleToothClick(${toothNum})" 
+                    class="w-7 h-10 sm:w-10 sm:h-12 flex flex-col items-center justify-center border-2 rounded-lg tooth-btn ${bgClass}"
+                    title="${hasNotes ? currentOdontogram[toothNum] : 'Pieza ' + toothNum}">
+                    <span class="text-[10px] sm:text-xs font-bold leading-none">${toothNum}</span>
+                    ${hasNotes ? '<i class="fas fa-circle text-[6px] sm:text-[8px] mt-1 text-red-600"></i>' : ''}
+                </button>`;
+        }
+        window.handleToothClick = function(toothNum) {
+            const existingNote = currentOdontogram[toothNum] || "";
+            const note = prompt(`Añadir detalles u observaciones para la PIEZA ${toothNum}:`, existingNote);
+            if (note !== null) { 
+                if (note.trim() === "") delete currentOdontogram[toothNum];
+                else currentOdontogram[toothNum] = note;
+                document.getElementById('hOdontogramData').value = JSON.stringify(currentOdontogram);
+                renderOdontogram();
+            }
+        }
+
+        async function populatePatientSelect(selectId) {
+            const patients = await fetchCollection('patients');
+            document.getElementById(selectId).innerHTML = patients.map(p => `<option value="${p.id}">${p.firstName} ${p.lastName} (${p.dni})</option>`).join('');
+        }
+        async function loadHistory() {
+            const histories = await fetchCollection('histories');
+            const patients = await fetchCollection('patients');
+            document.getElementById('historyTableBody').innerHTML = histories.map(h => {
+                const p = patients.find(x => x.id === h.patientId);
+                const pName = p ? `${p.firstName} ${p.lastName}` : 'Desconocido';
+                return `
+                <tr class="border-b border-gray-100 hover:bg-gray-50">
+                    <td class="p-4 text-gray-500">${h.date}</td>
+                    <td class="p-4 font-medium">${pName}</td>
+                    <td class="p-4">${h.plan}</td>
+                    <td class="p-4">
+                        <button onclick="editHistory('${h.id}')" class="text-cyan-600 mr-2"><i class="fas fa-edit"></i></button>
+                        <button onclick="deleteDoc('histories', '${h.id}')" class="text-red-500"><i class="fas fa-trash"></i></button>
+                    </td>
+                </tr>`;}).join('');
+        }
+        async function showHistoryForm() {
+            document.getElementById('historyId').value = '';
+            await populatePatientSelect('hPatient');
+            document.getElementById('hDate').value = new Date().toISOString().split('T')[0];
+            document.getElementById('hDiagnosis').value = '';
+            document.getElementById('hPlan').value = '';
+            currentOdontogram = {};
+            document.getElementById('hOdontogramData').value = '{}';
+            renderOdontogram();
+            document.getElementById('historyModal').classList.remove('hidden');
+        }
+        async function editHistory(id) {
+            await populatePatientSelect('hPatient');
+            const histories = await fetchCollection('histories');
+            const h = histories.find(x => x.id === id);
+            document.getElementById('historyId').value = h.id;
+            document.getElementById('hPatient').value = h.patientId;
+            document.getElementById('hDate').value = h.date;
+            document.getElementById('hDiagnosis').value = h.diagnosis;
+            document.getElementById('hPlan').value = h.plan;
+            document.getElementById('hStatus').value = h.status;
+            currentOdontogram = h.odontogram || {};
+            document.getElementById('hOdontogramData').value = JSON.stringify(currentOdontogram);
+            renderOdontogram();
+            document.getElementById('historyModal').classList.remove('hidden');
+        }
+        async function saveHistory(e) {
+            e.preventDefault();
+            const id = document.getElementById('historyId').value;
+            const data = {
+                patientId: document.getElementById('hPatient').value,
+                date: document.getElementById('hDate').value,
+                diagnosis: document.getElementById('hDiagnosis').value,
+                plan: document.getElementById('hPlan').value,
+                status: document.getElementById('hStatus').value,
+                odontogram: JSON.parse(document.getElementById('hOdontogramData').value)
+            };
+            if(id) await window.fbUpdateDoc(window.fbDoc(window.db, 'histories', id), data);
+            else await window.fbAddDoc(window.fbCollection(window.db, 'histories'), data);
+            closeModal('historyModal');
+            loadHistory();
+            showToast('Historia guardada');
+        }
+
+        // --- PRESUPUESTOS ---
+        async function loadBudgets() {
+            const budgets = await fetchCollection('budgets');
+            document.getElementById('budgetsTableBody').innerHTML = budgets.map(b => `
+                <tr class="border-b border-gray-100">
+                    <td class="p-4">${b.date}</td>
+                    <td class="p-4 font-bold text-cyan-700">S/ ${b.total}</td>
+                    <td class="p-4">${b.status}</td>
+                    <td class="p-4"><button onclick="deleteDoc('budgets', '${b.id}')" class="text-red-500"><i class="fas fa-trash"></i></button></td>
+                </tr>
+            `).join('');
+        }
+        async function showBudgetForm() {
+            document.getElementById('budgetId').value = '';
+            await populatePatientSelect('bPatient');
+            document.getElementById('budgetModal').classList.remove('hidden');
+        }
+        async function saveBudget(e) {
+            e.preventDefault();
+            const data = { patientId: document.getElementById('bPatient').value, date: document.getElementById('bDate').value, total: document.getElementById('bTotal').value, status: document.getElementById('bStatus').value };
+            await window.fbAddDoc(window.fbCollection(window.db, 'budgets'), data);
+            closeModal('budgetModal');
+            loadBudgets();
+            showToast('Presupuesto guardado');
+        }
+
+        // --- GALERIA & IMAGENES WEB (SUBIDA LOCAL) ---
+        async function loadGallery() {
+            const gallery = await fetchCollection('gallery');
+            document.getElementById('galleryGrid').innerHTML = gallery.map(g => `
+                <div class="relative group rounded-2xl overflow-hidden shadow-lg bg-gray-100 border border-gray-200">
+                    <img src="${g.url}" class="w-full h-40 object-cover">
+                    <div class="p-3 bg-white flex flex-col justify-between h-full">
+                        <span class="text-[10px] font-bold text-cyan-600 uppercase mb-1">${g.category}</span>
+                        <h5 class="text-sm font-bold text-gray-800 truncate" title="${g.title}">${g.title}</h5>
+                        <button onclick="deleteDoc('gallery', '${g.id}')" class="text-red-500 text-xs mt-2 font-medium self-end"><i class="fas fa-trash"></i> Eliminar</button>
+                    </div>
+                </div>
+            `).join('');
+        }
+        function showGalleryForm() { 
+            document.getElementById('gId').value = ''; 
+            document.getElementById('gBase64').value = ''; 
+            document.getElementById('gFileName').innerHTML = 'Click para subir foto desde tu PC'; 
+            document.getElementById('gFile').value = ''; 
+            document.getElementById('galleryModal').classList.remove('hidden'); 
+        }
+        async function saveGalleryImage(e) {
+            e.preventDefault();
+            const base64Str = document.getElementById('gBase64').value;
+            
+            if (!base64Str) {
+                showToast('Por favor, selecciona una imagen de tu computadora.', 'error');
+                return;
+            }
+
+            const data = { 
+                title: document.getElementById('gTitle').value, 
+                category: document.getElementById('gCategory').value, 
+                url: base64Str 
+            };
+            
+            // Si la foto es para Inicio o Sobre Mí, debemos eliminar las anteriores de esa categoría para no saturar BD
+            if (data.category !== 'Caso de Éxito') {
+                const gallery = await fetchCollection('gallery');
+                const existing = gallery.filter(g => g.category === data.category);
+                for (let oldImg of existing) {
+                    await window.fbDeleteDoc(window.fbDoc(window.db, 'gallery', oldImg.id));
+                }
+            }
+
+            await window.fbAddDoc(window.fbCollection(window.db, 'gallery'), data);
+            closeModal('galleryModal');
+            loadGallery();
+            showToast('Imagen subida y web actualizada');
+        }
+
+        // --- PROMOCIONES (POP-UPS) ---
+        async function loadPromotions() {
+            const promos = await fetchCollection('promotions');
+            document.getElementById('promosGrid').innerHTML = promos.map(pr => `
+                <div class="rounded-2xl overflow-hidden shadow-lg border border-purple-100 flex flex-col relative">
+                    ${pr.active ? '<div class="absolute top-2 right-2 bg-green-500 text-white text-xs px-3 py-1 rounded-full shadow-lg font-bold"><i class="fas fa-check-circle"></i> Activa</div>' : '<div class="absolute top-2 right-2 bg-gray-500 text-white text-xs px-3 py-1 rounded-full shadow-lg font-bold">Inactiva</div>'}
+                    <div class="h-48 bg-gray-100 flex justify-center p-2">
+                        <img src="${pr.url}" class="h-full object-contain drop-shadow-md">
+                    </div>
+                    <div class="p-4 bg-white flex flex-col gap-3">
+                        <h5 class="font-bold text-gray-800">${pr.title}</h5>
+                        <div class="flex justify-between items-center mt-2 border-t pt-3">
+                            <button onclick="togglePromoActive('${pr.id}', ${pr.active})" class="text-sm font-medium ${pr.active ? 'text-gray-500' : 'text-purple-600'}">${pr.active ? 'Desactivar' : '<i class="fas fa-bolt"></i> Activar'}</button>
+                            <button onclick="deleteDoc('promotions', '${pr.id}')" class="text-red-500 text-sm"><i class="fas fa-trash"></i> Eliminar</button>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
+        function showPromoForm() { 
+            document.getElementById('prId').value = ''; 
+            document.getElementById('prBase64').value = ''; 
+            document.getElementById('prFileName').innerHTML = 'Sube tu diseño promocional'; 
+            document.getElementById('prFile').value = ''; 
+            document.getElementById('promoModal').classList.remove('hidden'); 
+        }
+        async function savePromo(e) {
+            e.preventDefault();
+            const base64Str = document.getElementById('prBase64').value;
+            if (!base64Str) { showToast('Selecciona una imagen', 'error'); return; }
+
+            const isActive = document.getElementById('prActive').checked;
+            
+            // Si vamos a activar esta, desactivamos todas las demás
+            if (isActive) {
+                const promos = await fetchCollection('promotions');
+                for (let p of promos) {
+                    if (p.active) await window.fbUpdateDoc(window.fbDoc(window.db, 'promotions', p.id), { active: false });
+                }
+            }
+
+            const data = { title: document.getElementById('prTitle').value, active: isActive, url: base64Str };
+            await window.fbAddDoc(window.fbCollection(window.db, 'promotions'), data);
+            closeModal('promoModal');
+            loadPromotions();
+            showToast('Promoción lista');
+        }
+        window.togglePromoActive = async function(id, currentState) {
+            if (!currentState) {
+                // Desactivar las demás
+                const promos = await fetchCollection('promotions');
+                for (let p of promos) {
+                    if (p.active) await window.fbUpdateDoc(window.fbDoc(window.db, 'promotions', p.id), { active: false });
+                }
+            }
+            await window.fbUpdateDoc(window.fbDoc(window.db, 'promotions', id), { active: !currentState });
+            loadPromotions();
+            showToast('Estado de promoción actualizado');
+        }
+
+        // --- TESTIMONIOS, FINANZAS, MENSAJES ---
+        async function loadTestimonialsAdmin() {
+            const tests = await fetchCollection('testimonials');
+            document.getElementById('testimonialsTableBody').innerHTML = tests.map(t => `
+                <tr class="border-b border-gray-100">
+                    <td class="p-4">${t.name}</td>
+                    <td class="p-4 truncate max-w-xs">${t.text}</td>
+                    <td class="p-4">${t.visible ? 'Sí' : 'No'}</td>
+                    <td class="p-4"><button onclick="deleteDoc('testimonials', '${t.id}')" class="text-red-500"><i class="fas fa-trash"></i></button></td>
+                </tr>
+            `).join('');
+        }
+        function showTestimonialForm() { document.getElementById('tId').value = ''; document.getElementById('testimonialModal').classList.remove('hidden'); }
+        async function saveTestimonial(e) {
+            e.preventDefault();
+            const data = { name: document.getElementById('tName').value, treatment: document.getElementById('tTreatment').value, text: document.getElementById('tText').value, rating: parseInt(document.getElementById('tRating').value), visible: document.getElementById('tVisible').value === 'true' };
+            await window.fbAddDoc(window.fbCollection(window.db, 'testimonials'), data);
+            closeModal('testimonialModal');
+            loadTestimonialsAdmin();
+            showToast('Testimonio añadido a la web');
+        }
+
+        async function loadFinance() {
+            const txs = await fetchCollection('transactions');
+            document.getElementById('transactionsTableBody').innerHTML = txs.map(t => `
+                <tr class="border-b border-gray-100">
+                    <td class="p-3">${t.date}</td>
+                    <td class="p-3">${t.type==='income'?'Ingreso':'Gasto'}</td>
+                    <td class="p-3 text-${t.type==='income'?'green':'red'}-600">S/ ${t.amount}</td>
+                    <td class="p-3">${t.category}</td>
+                    <td class="p-3"><button onclick="deleteDoc('transactions', '${t.id}')" class="text-red-500"><i class="fas fa-trash"></i></button></td>
+                </tr>
+            `).join('');
+        }
+        function showTransactionForm() { document.getElementById('txId').value = ''; document.getElementById('transactionModal').classList.remove('hidden'); }
+        async function saveTransaction(e) {
+            e.preventDefault();
+            const data = { type: document.getElementById('txType').value, date: document.getElementById('txDate').value, description: document.getElementById('txDescription').value, amount: parseFloat(document.getElementById('txAmount').value), category: document.getElementById('txCategory').value };
+            await window.fbAddDoc(window.fbCollection(window.db, 'transactions'), data);
+            closeModal('transactionModal');
+            loadFinance();
+            showToast('Transacción registrada');
+        }
+
+        async function submitContactForm(e) {
+            e.preventDefault();
+            const data = {
+                firstName: document.getElementById('contactFirstName').value,
+                lastName: document.getElementById('contactLastName').value,
+                email: document.getElementById('contactEmail').value,
+                phone: document.getElementById('contactPhone').value,
+                treatment: document.getElementById('contactTreatment').value,
+                message: document.getElementById('contactMessage').value,
+                date: new Date().toISOString(),
+                read: false
+            };
+            await window.fbAddDoc(window.fbCollection(window.db, 'messages'), data);
+            e.target.reset();
+            showToast('¡Solicitud enviada! Nos contactaremos pronto.');
+        }
+
+        async function loadMessages() {
+            const msgs = await fetchCollection('messages');
+            document.getElementById('messagesList').innerHTML = msgs.map(m => `
+                <div class="p-4 border-b hover:bg-gray-50 cursor-pointer" onclick="alert('Mensaje de: ${m.firstName}\\nCelular: ${m.phone}\\nTratamiento: ${m.treatment}\\nMensaje: ${m.message}')">
+                    <p class="font-bold text-sm">${m.firstName} ${m.lastName} <span class="text-xs font-normal text-gray-500">(${m.phone})</span></p>
+                    <p class="text-xs text-cyan-600 mb-1">${m.treatment}</p>
+                    <p class="text-sm text-gray-600 italic">"${m.message}"</p>
+                    <button onclick="event.stopPropagation(); deleteDoc('messages', '${m.id}'); setTimeout(()=>loadMessages(), 500)" class="text-red-500 text-xs mt-2"><i class="fas fa-trash"></i> Eliminar Mensaje</button>
+                </div>
+            `).join('');
+        }
+    </script>
+</body>
+</html>
