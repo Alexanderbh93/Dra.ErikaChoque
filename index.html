@@ -1,0 +1,1208 @@
+<!DOCTYPE html>
+<html lang="es" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Prisma Dental Studio | by Erika Magaly Choque - Especialista en Ortodoncia</title>
+    
+    <!-- FAVICON -->
+    <link rel="icon" type="image/png" href="./logo.png">
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/fontsource/fonts/inter@latest/latin-400-normal.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/fontsource/fonts/inter@latest/latin-600-normal.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/fontsource/fonts/inter@latest/latin-700-normal.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/fontsource/fonts/playfair-display@latest/latin-700-normal.css">
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        gold: {
+                            50: '#FAF8F5',
+                            100: '#F3EFE6',
+                            200: '#E5DEC9',
+                            300: '#D5C295',
+                            400: '#C5A059',
+                            500: '#B08D46',
+                            600: '#9A7B3E',
+                            700: '#7D6230',
+                            800: '#5E4924',
+                            900: '#3D2F17',
+                        },
+                        obsidian: '#1A1715',
+                        charcoal: '#262220'
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        * { font-family: 'Inter', sans-serif; }
+        .font-serif { font-family: 'Playfair Display', serif; }
+        
+        /* Gradientes inspirados en el logo de Prisma Dental Studio */
+        .gradient-primary { background: linear-gradient(135deg, #1A1715 0%, #262220 50%, #362F2B 100%); }
+        .gradient-gold { background: linear-gradient(135deg, #D5C295 0%, #C5A059 50%, #9A7B3E 100%); }
+        .text-gradient-gold { background: linear-gradient(135deg, #E5DEC9, #C5A059); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        
+        .card-hover { transition: all 0.3s ease; }
+        .card-hover:hover { transform: translateY(-5px); box-shadow: 0 20px 40px rgba(197, 160, 89, 0.15); }
+        
+        .fade-in { animation: fadeIn 0.5s ease-out; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(15px); } to { opacity: 1; transform: translateY(0); } }
+        
+        .sidebar-active { background: linear-gradient(135deg, #C5A059, #9A7B3E); color: white !important; font-weight: 600; }
+        
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #FAF8F5; }
+        ::-webkit-scrollbar-thumb { background: #C5A059; border-radius: 4px; }
+        
+        .modal-overlay { transition: opacity 0.3s; }
+    </style>
+</head>
+<body class="bg-gold-50 text-obsidian">
+
+    <!-- PUBLIC WEBSITE -->
+    <div id="publicSite">
+        
+        <!-- PROMO POPUP MODAL (Mención principal) -->
+        <div id="publicPromoModal" class="hidden fixed inset-0 bg-black/80 z-[200] flex items-center justify-center p-4 modal-overlay" onclick="if(event.target===this) closePromoModal()">
+            <div class="relative max-w-md w-full fade-in bg-white rounded-3xl overflow-hidden shadow-2xl border-2 border-gold-400">
+                <button onclick="closePromoModal()" class="absolute top-3 right-3 bg-obsidian/80 text-white rounded-full w-9 h-9 flex items-center justify-center shadow-lg hover:bg-obsidian z-10 transition">
+                    <i class="fas fa-times"></i>
+                </button>
+                <div class="bg-obsidian text-gold-300 text-xs font-bold uppercase tracking-widest py-2 px-4 text-center">
+                    <i class="fas fa-sparkles mr-1"></i> Promoción Especial Activa
+                </div>
+                <img id="promoImage" src="" alt="Promoción Prisma Dental Studio" class="w-full max-h-[70vh] object-contain bg-neutral-900">
+                <div class="p-5 bg-white text-center">
+                    <h4 id="promoTitleModal" class="font-bold text-gray-800 text-lg mb-3"></h4>
+                    <a id="promoWaLink" href="https://wa.me/51950381224" target="_blank" class="w-full inline-flex items-center justify-center gap-2 gradient-gold text-white py-3 px-6 rounded-xl font-bold shadow-md hover:opacity-95 transition">
+                        <i class="fab fa-whatsapp text-lg"></i> Consultar Promoción
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- CASUAL PROMO FLOATING BADGE (Mención casual persistente en esquina inferior izquierda) -->
+        <div id="casualPromoBanner" class="hidden fixed bottom-6 left-6 z-40 max-w-xs bg-obsidian text-white p-3.5 rounded-2xl shadow-2xl border border-gold-400/50 flex items-center gap-3 cursor-pointer hover:scale-105 transition duration-300" onclick="openPromoModal()">
+            <div class="w-10 h-10 rounded-xl gradient-gold flex items-center justify-center flex-shrink-0 text-white shadow">
+                <i class="fas fa-gift text-lg"></i>
+            </div>
+            <div class="pr-2">
+                <span class="text-[10px] uppercase tracking-wider text-gold-300 font-bold block">Promo Activa</span>
+                <p id="casualPromoText" class="text-xs font-semibold text-white line-clamp-1">Ver promoción del mes</p>
+            </div>
+            <button onclick="event.stopPropagation(); document.getElementById('casualPromoBanner').classList.add('hidden');" class="text-gray-400 hover:text-white text-xs px-1">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+
+        <!-- Top Bar -->
+        <div class="bg-obsidian text-gold-100 py-2.5 text-xs md:text-sm border-b border-gold-900/40">
+            <div class="max-w-7xl mx-auto px-4 flex justify-between items-center">
+                <div class="flex items-center gap-4">
+                    <span><i class="fas fa-phone text-gold-400 mr-1.5"></i> +51 950 381 224</span>
+                    <span class="hidden md:inline"><i class="fas fa-map-marker-alt text-gold-400 mr-1.5"></i> Arequipa, Perú</span>
+                </div>
+                <div class="flex items-center gap-4">
+                    <span class="hidden md:inline"><i class="fas fa-clock text-gold-400 mr-1.5"></i> Lun - Sáb: 9:00 - 19:00</span>
+                    <a href="#" onclick="showBackofficeLogin(); return false;" class="text-gold-300 hover:text-white transition font-medium"><i class="fas fa-lock mr-1"></i> Gestión Web</a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Navigation -->
+        <nav class="bg-white/95 backdrop-blur-md shadow-sm sticky top-0 z-50 border-b border-gold-200/60">
+            <div class="max-w-7xl mx-auto px-4">
+                <div class="flex justify-between items-center py-3.5">
+                    <a href="#inicio" class="flex items-center gap-3.5">
+                        <!-- LOGO DE NAVEGACIÓN -->
+                        <div class="w-14 h-14 flex items-center justify-center">
+                            <img src="./logo.png" alt="Prisma Dental Studio Logo" class="w-full h-full object-contain">
+                        </div>
+                        <div>
+                            <span class="text-xl font-bold tracking-[0.18em] text-obsidian block leading-none">PRISMA</span>
+                            <span class="text-xs font-medium text-gold-700 tracking-wider block mt-0.5">DENTAL STUDIO</span>
+                            <span class="text-[11px] text-gold-600 italic font-serif">by Erika Magaly Choque</span>
+                        </div>
+                    </a>
+                    <div class="hidden lg:flex items-center gap-8 text-sm">
+                        <a href="#inicio" class="text-gray-700 hover:text-gold-600 transition font-medium">Inicio</a>
+                        <a href="#sobre-mi" class="text-gray-700 hover:text-gold-600 transition font-medium">Dra. Erika Choque</a>
+                        <a href="#servicios" class="text-gray-700 hover:text-gold-600 transition font-medium">Especialidades</a>
+                        <a href="#casos" class="text-gray-700 hover:text-gold-600 transition font-medium">Antes y Después</a>
+                        <a href="#testimonios" class="text-gray-700 hover:text-gold-600 transition font-medium">Reseñas Google</a>
+                        <a href="#contacto" class="text-gray-700 hover:text-gold-600 transition font-medium">Contacto</a>
+                    </div>
+                    <div class="flex items-center gap-3">
+                        <a href="https://wa.me/51950381224" target="_blank" class="gradient-gold text-white px-5 py-2.5 rounded-full hover:opacity-95 transition flex items-center gap-2 text-sm font-semibold shadow-md">
+                            <i class="fab fa-whatsapp text-lg"></i>
+                            <span class="hidden sm:inline">Agendar Cita</span>
+                        </a>
+                        <button onclick="toggleMobileMenu()" class="lg:hidden text-obsidian p-2">
+                            <i class="fas fa-bars text-xl"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <!-- Mobile Menu -->
+            <div id="mobileMenu" class="hidden lg:hidden bg-white border-t border-gold-100 px-4 py-4 space-y-2">
+                <a href="#inicio" onclick="toggleMobileMenu()" class="block py-2 text-gray-700 font-medium">Inicio</a>
+                <a href="#sobre-mi" onclick="toggleMobileMenu()" class="block py-2 text-gray-700 font-medium">Dra. Erika Choque</a>
+                <a href="#servicios" onclick="toggleMobileMenu()" class="block py-2 text-gray-700 font-medium">Especialidades</a>
+                <a href="#casos" onclick="toggleMobileMenu()" class="block py-2 text-gray-700 font-medium">Antes y Después</a>
+                <a href="#testimonios" onclick="toggleMobileMenu()" class="block py-2 text-gray-700 font-medium">Reseñas Google</a>
+                <a href="#contacto" onclick="toggleMobileMenu()" class="block py-2 text-gray-700 font-medium">Contacto</a>
+            </div>
+        </nav>
+
+        <!-- Hero Section -->
+        <section id="inicio" class="relative min-h-[88vh] flex items-center gradient-primary overflow-hidden py-16">
+            <div class="absolute inset-0 opacity-15 pointer-events-none">
+                <div class="absolute top-16 left-10 w-80 h-80 bg-gold-400 rounded-full blur-3xl"></div>
+                <div class="absolute bottom-10 right-10 w-96 h-96 bg-gold-600 rounded-full blur-3xl"></div>
+            </div>
+            <div class="max-w-7xl mx-auto px-4 grid lg:grid-cols-2 gap-12 items-center relative z-10">
+                <div class="text-white fade-in">
+                    <div class="inline-flex items-center gap-2 bg-white/10 backdrop-blur-sm border border-gold-400/30 rounded-full px-4 py-2 mb-6">
+                        <i class="fas fa-gem text-gold-400 text-xs"></i>
+                        <span class="text-xs uppercase tracking-widest text-gold-200 font-semibold">Ortodoncia & Estética Dental</span>
+                    </div>
+                    <h1 class="text-4xl md:text-6xl font-bold leading-tight mb-4 font-serif">
+                        Diseño y Precisión<br>
+                        <span class="text-gradient-gold">En Tu Sonrisa</span>
+                    </h1>
+                    <p class="text-sm uppercase tracking-widest text-gold-300 font-semibold mb-4">
+                        Prisma Dental Studio by Erika Magaly Choque
+                    </p>
+                    <p class="text-base md:text-lg text-gray-300 mb-8 max-w-lg leading-relaxed">
+                        Más de 8 años de experiencia clínica transformando sonrisas en Arequipa mediante ortodoncia avanzada, planificación digital y atención personalizada.
+                    </p>
+                    <div class="flex flex-wrap gap-4">
+                        <a href="#contacto" class="gradient-gold text-white px-8 py-4 rounded-full font-bold hover:opacity-95 transition shadow-xl">
+                            <i class="fas fa-calendar-check mr-2"></i>Agendar Evaluación
+                        </a>
+                        <a href="#casos" class="border-2 border-gold-400/60 text-gold-100 px-8 py-4 rounded-full font-bold hover:bg-gold-400/10 transition">
+                            <i class="fas fa-sliders-h mr-2"></i>Ver Antes y Después
+                        </a>
+                    </div>
+                </div>
+                <div class="flex justify-center fade-in">
+                    <div class="relative">
+                        <div class="w-80 h-80 md:w-96 md:h-96 rounded-full overflow-hidden border-4 border-gold-400/60 shadow-2xl bg-white p-2">
+                            <img id="heroImage" src="./inicio.jpg" onerror="this.src='./logo.png'" alt="Prisma Dental Studio - Dra. Erika Magaly Choque" class="w-full h-full object-cover rounded-full">
+                        </div>
+                        <div class="absolute -bottom-4 -left-4 bg-white text-obsidian px-5 py-3 rounded-2xl shadow-xl border border-gold-200 flex items-center gap-3">
+                            <div class="w-10 h-10 rounded-xl gradient-gold flex items-center justify-center text-white">
+                                <i class="fas fa-star"></i>
+                            </div>
+                            <div>
+                                <p class="text-xs text-gray-500 font-medium">Calificación Pacientes</p>
+                                <p class="text-sm font-bold text-obsidian">5.0 ★ en Google Business</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Trust Badges -->
+        <section class="py-10 bg-white border-b border-gold-200/50">
+            <div class="max-w-7xl mx-auto px-4">
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-6 text-center">
+                    <div class="flex flex-col items-center gap-2">
+                        <div class="w-12 h-12 rounded-full bg-gold-50 flex items-center justify-center text-gold-600">
+                            <i class="fas fa-graduation-cap text-2xl"></i>
+                        </div>
+                        <span class="text-sm font-semibold text-obsidian">Magíster & Especialista</span>
+                    </div>
+                    <div class="flex flex-col items-center gap-2">
+                        <div class="w-12 h-12 rounded-full bg-gold-50 flex items-center justify-center text-gold-600">
+                            <i class="fas fa-certificate text-2xl"></i>
+                        </div>
+                        <span class="text-sm font-semibold text-obsidian">Especialista Colegiada COP</span>
+                    </div>
+                    <div class="flex flex-col items-center gap-2">
+                        <div class="w-12 h-12 rounded-full bg-gold-50 flex items-center justify-center text-gold-600">
+                            <i class="fas fa-microscope text-2xl"></i>
+                        </div>
+                        <span class="text-sm font-semibold text-obsidian">Planificación Digital 3D</span>
+                    </div>
+                    <div class="flex flex-col items-center gap-2">
+                        <div class="w-12 h-12 rounded-full bg-gold-50 flex items-center justify-center text-gold-600">
+                            <i class="fas fa-hand-holding-heart text-2xl"></i>
+                        </div>
+                        <span class="text-sm font-semibold text-obsidian">Trato Exclusivo y Cálido</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- About Section -->
+        <section id="sobre-mi" class="py-20 bg-gold-50">
+            <div class="max-w-7xl mx-auto px-4">
+                <div class="grid lg:grid-cols-2 gap-16 items-center">
+                    <div class="relative">
+                        <img id="aboutImage" src="./sobre-mi.jpg" onerror="this.src='./logo.png'" alt="Prisma Dental Studio" class="rounded-3xl shadow-2xl w-full h-[480px] object-cover bg-white border border-gold-200">
+                        <div class="absolute -bottom-6 -right-6 bg-obsidian text-white rounded-2xl p-6 shadow-xl border border-gold-400/40">
+                            <div class="text-4xl font-bold text-gold-400">8+</div>
+                            <div class="text-gray-300 text-sm">Años creando<br>sonrisas armónicas</div>
+                        </div>
+                    </div>
+                    <div>
+                        <span class="text-gold-600 font-bold text-xs uppercase tracking-widest">Dirección Clínica</span>
+                        <h2 class="text-3xl md:text-4xl font-bold text-obsidian mt-2 mb-2 font-serif">Dra. Erika Magaly Choque</h2>
+                        <p class="text-gold-700 font-medium text-sm mb-6">Fundadora de Prisma Dental Studio · Especialista en Ortodoncia</p>
+                        <p class="text-gray-600 mb-6 leading-relaxed">
+                            En <strong>Prisma Dental Studio</strong> combinamos ciencia ortodóntica, armonía facial y tecnología moderna. Como cirujana dentista con maestría y segunda especialidad en Ortodoncia y Ortopedia Maxilar, diseño cada tratamiento a medida para lograr resultados estéticos, funcionales y estables en el tiempo.
+                        </p>
+                        <div class="grid grid-cols-2 gap-4 mb-8">
+                            <div class="flex items-center gap-3 bg-white p-3.5 rounded-2xl border border-gold-200/70">
+                                <i class="fas fa-university text-gold-600 text-xl"></i>
+                                <span class="text-sm font-medium text-gray-800">Especialidad UNMSM</span>
+                            </div>
+                            <div class="flex items-center gap-3 bg-white p-3.5 rounded-2xl border border-gold-200/70">
+                                <i class="fas fa-award text-gold-600 text-xl"></i>
+                                <span class="text-sm font-medium text-gray-800">Ortodoncia Certificada</span>
+                            </div>
+                        </div>
+                        <a href="#contacto" class="inline-flex items-center gap-2 gradient-gold text-white px-7 py-3.5 rounded-full font-semibold hover:shadow-lg transition">
+                            <i class="fas fa-calendar-alt"></i> Reservar Cita con la Doctora
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Services Section -->
+        <section id="servicios" class="py-20 bg-white">
+            <div class="max-w-7xl mx-auto px-4">
+                <div class="text-center mb-16">
+                    <span class="text-gold-600 font-bold text-xs uppercase tracking-widest">Nuestras Especialidades</span>
+                    <h3 class="text-4xl font-bold text-obsidian mt-2 font-serif">Tratamientos en Prisma Dental Studio</h3>
+                </div>
+                <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+                    <div class="bg-gold-50/60 rounded-3xl p-8 shadow-sm card-hover border border-gold-200/70">
+                        <div class="w-14 h-14 rounded-2xl gradient-gold flex items-center justify-center mb-6 shadow-md">
+                            <i class="fas fa-gem text-white text-xl"></i>
+                        </div>
+                        <h4 class="text-xl font-bold text-obsidian mb-3">Brackets Estéticos de Zafiro</h4>
+                        <p class="text-gray-600 text-sm leading-relaxed">Cristal de zafiro transparente que se mimetiza con el color natural de tus dientes. Alta estética durante todo tu tratamiento.</p>
+                    </div>
+                    <div class="bg-white rounded-3xl p-8 shadow-md card-hover border-2 border-gold-400 relative">
+                        <div class="absolute -top-3 right-6 bg-obsidian text-gold-300 text-xs font-bold px-3.5 py-1 rounded-full">MÁS SOLICITADO</div>
+                        <div class="w-14 h-14 rounded-2xl gradient-gold flex items-center justify-center mb-6 shadow-md">
+                            <i class="fas fa-magic text-white text-xl"></i>
+                        </div>
+                        <h4 class="text-xl font-bold text-obsidian mb-3">Alineadores Invisibles</h4>
+                        <p class="text-gray-600 text-sm leading-relaxed">Férulas transparentes removibles planificadas digitalmente. Alinea tu sonrisa con total discreción y comodidad al comer.</p>
+                    </div>
+                    <div class="bg-gold-50/60 rounded-3xl p-8 shadow-sm card-hover border border-gold-200/70">
+                        <div class="w-14 h-14 rounded-2xl gradient-gold flex items-center justify-center mb-6 shadow-md">
+                            <i class="fas fa-bolt text-white text-xl"></i>
+                        </div>
+                        <h4 class="text-xl font-bold text-obsidian mb-3">Brackets Autoligables</h4>
+                        <p class="text-gray-600 text-sm leading-relaxed">Tecnología de baja fricción sin ligaduras elásticas que optimiza los tiempos de tratamiento y facilita la higiene dental.</p>
+                    </div>
+                    <div class="bg-gold-50/60 rounded-3xl p-8 shadow-sm card-hover border border-gold-200/70">
+                        <div class="w-14 h-14 rounded-2xl gradient-gold flex items-center justify-center mb-6 shadow-md">
+                            <i class="fas fa-tooth text-white text-xl"></i>
+                        </div>
+                        <h4 class="text-xl font-bold text-obsidian mb-3">Brackets Metálicos de Precisión</h4>
+                        <p class="text-gray-600 text-sm leading-relaxed">Sistemas modernos de perfil bajo, altamente resistentes y efectivos para correcciones de mordida complejas.</p>
+                    </div>
+                    <div class="bg-gold-50/60 rounded-3xl p-8 shadow-sm card-hover border border-gold-200/70">
+                        <div class="w-14 h-14 rounded-2xl gradient-gold flex items-center justify-center mb-6 shadow-md">
+                            <i class="fas fa-child text-white text-xl"></i>
+                        </div>
+                        <h4 class="text-xl font-bold text-obsidian mb-3">Ortopedia Maxilar Infantil</h4>
+                        <p class="text-gray-600 text-sm leading-relaxed">Intercepción temprana en niños para guiar el correcto crecimiento óseo y crear el espacio ideal para los dientes definitivos.</p>
+                    </div>
+                    <div class="bg-gold-50/60 rounded-3xl p-8 shadow-sm card-hover border border-gold-200/70">
+                        <div class="w-14 h-14 rounded-2xl gradient-gold flex items-center justify-center mb-6 shadow-md">
+                            <i class="fas fa-smile-beam text-white text-xl"></i>
+                        </div>
+                        <h4 class="text-xl font-bold text-obsidian mb-3">Diseño y Estética Dental</h4>
+                        <p class="text-gray-600 text-sm leading-relaxed">Blanqueamiento clínico, contorneado estético y rehabilitación final para complementar tu tratamiento de ortodoncia.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Before & After (Casos de Éxito) Section -->
+        <section id="casos" class="py-20 bg-gold-50">
+            <div class="max-w-7xl mx-auto px-4">
+                <div class="text-center mb-16">
+                    <span class="text-gold-600 font-bold text-xs uppercase tracking-widest">Transformaciones Reales</span>
+                    <h3 class="text-4xl font-bold text-obsidian mt-2 font-serif">Antes y Después</h3>
+                    <p class="text-gray-600 mt-3 max-w-2xl mx-auto text-sm">Casos clínicos reales tratados en Prisma Dental Studio por la Dra. Erika Magaly Choque.</p>
+                </div>
+                <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8" id="publicCases">
+                    <!-- Dinámico vía Firebase -->
+                </div>
+            </div>
+        </section>
+
+        <!-- Google Business Testimonials Section -->
+        <section id="testimonios" class="py-20 gradient-primary text-white">
+            <div class="max-w-7xl mx-auto px-4">
+                <div class="flex flex-col md:flex-row justify-between items-center mb-14 gap-6">
+                    <div>
+                        <div class="inline-flex items-center gap-2 bg-white/10 px-3.5 py-1.5 rounded-full mb-3 border border-white/15">
+                            <i class="fab fa-google text-gold-400"></i>
+                            <span class="text-xs font-semibold tracking-wider uppercase text-gold-200">Google Business Profile</span>
+                        </div>
+                        <h3 class="text-3xl md:text-4xl font-bold font-serif">Opiniones en Google Reviews</h3>
+                    </div>
+                    <div class="bg-white/10 backdrop-blur-md border border-gold-400/30 rounded-2xl p-4 flex items-center gap-4">
+                        <div class="text-center pr-4 border-r border-white/20">
+                            <span class="text-3xl font-bold text-gold-300 block">5.0</span>
+                            <div class="text-yellow-400 text-xs mt-0.5">
+                                <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
+                            </div>
+                        </div>
+                        <div>
+                            <p class="text-xs text-gray-300 mb-2">Prisma Dental Studio by Erika Magaly Choque</p>
+                            <a href="https://www.google.com/maps/place/Dra.+Erika+Magaly+Choque+%7C+Especialista+en+Ortodoncia/@-16.4017446,-71.5494625,18z" target="_blank" class="inline-flex items-center gap-1.5 text-xs font-bold bg-white text-obsidian px-3.5 py-1.5 rounded-lg hover:bg-gold-100 transition">
+                                <i class="fab fa-google text-red-500"></i> Ver en Google Maps
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                <div class="grid md:grid-cols-3 gap-8" id="publicTestimonials">
+                    <!-- Dinámico vía Firebase -->
+                </div>
+            </div>
+        </section>
+
+        <!-- Contact Section -->
+        <section id="contacto" class="py-20 bg-white">
+            <div class="max-w-7xl mx-auto px-4">
+                <div class="grid lg:grid-cols-2 gap-16">
+                    <div>
+                        <span class="text-gold-600 font-bold text-xs uppercase tracking-widest">Contacto Directo</span>
+                        <h3 class="text-4xl font-bold text-obsidian mt-2 mb-4 font-serif">Agenda tu Evaluación</h3>
+                        <p class="text-gray-600 mb-8 text-sm leading-relaxed">
+                            Visítanos en <strong>Prisma Dental Studio</strong>. Evaluaremos detalladamente tu sonrisa para explicarte las alternativas ideales y el tiempo estimado de tu tratamiento.
+                        </p>
+                        
+                        <div class="space-y-5">
+                            <div class="flex items-start gap-4">
+                                <div class="w-12 h-12 rounded-2xl bg-gold-100 flex items-center justify-center flex-shrink-0">
+                                    <i class="fas fa-map-marker-alt text-gold-700 text-lg"></i>
+                                </div>
+                                <div>
+                                    <h5 class="font-bold text-obsidian text-sm">Ubicación</h5>
+                                    <p class="text-gray-600 text-sm">Umacollo / Urb. Magisterial, Arequipa, Perú</p>
+                                </div>
+                            </div>
+                            <div class="flex items-start gap-4">
+                                <div class="w-12 h-12 rounded-2xl bg-gold-100 flex items-center justify-center flex-shrink-0">
+                                    <i class="fas fa-phone text-gold-700 text-lg"></i>
+                                </div>
+                                <div>
+                                    <h5 class="font-bold text-obsidian text-sm">WhatsApp / Citas</h5>
+                                    <p class="text-gray-600 text-sm">+51 950 381 224</p>
+                                </div>
+                            </div>
+                            
+                            <!-- Google Maps iFrame -->
+                            <div class="w-full h-64 mt-6 rounded-2xl overflow-hidden shadow-md border border-gold-200">
+                                <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d1913.7270842739774!2d-71.54946249458162!3d-16.40174458550158!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x91424b943e130a8d%3A0xc5e8ba28f2aa8027!2sDra.%20Erika%20Magaly%20Choque%20%7C%20Especialista%20en%20Ortodoncia!5e0!3m2!1ses!2spe!4v1782340653591!5m2!1ses!2spe" width="100%" height="100%" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="strict-origin-when-cross-origin"></iframe>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="bg-gold-50 rounded-3xl p-8 shadow-lg border border-gold-200/80">
+                        <h4 class="text-xl font-bold text-obsidian mb-6">Solicita tu Cita</h4>
+                        <form onsubmit="submitContactForm(event)">
+                            <div class="grid grid-cols-2 gap-4 mb-4">
+                                <div>
+                                    <label class="block text-xs font-semibold uppercase text-gray-600 mb-1">Nombre *</label>
+                                    <input type="text" id="contactFirstName" required class="w-full px-4 py-3 rounded-xl border border-gold-200 bg-white focus:border-gold-500 outline-none transition">
+                                </div>
+                                <div>
+                                    <label class="block text-xs font-semibold uppercase text-gray-600 mb-1">Apellido *</label>
+                                    <input type="text" id="contactLastName" required class="w-full px-4 py-3 rounded-xl border border-gold-200 bg-white focus:border-gold-500 outline-none transition">
+                                </div>
+                            </div>
+                            <div class="mb-4">
+                                <label class="block text-xs font-semibold uppercase text-gray-600 mb-1">Teléfono / WhatsApp *</label>
+                                <input type="tel" id="contactPhone" required class="w-full px-4 py-3 rounded-xl border border-gold-200 bg-white focus:border-gold-500 outline-none transition">
+                            </div>
+                            <div class="mb-4">
+                                <label class="block text-xs font-semibold uppercase text-gray-600 mb-1">Email</label>
+                                <input type="email" id="contactEmail" class="w-full px-4 py-3 rounded-xl border border-gold-200 bg-white focus:border-gold-500 outline-none transition">
+                            </div>
+                            <div class="mb-4">
+                                <label class="block text-xs font-semibold uppercase text-gray-600 mb-1">Tratamiento de interés *</label>
+                                <select id="contactTreatment" required class="w-full px-4 py-3 rounded-xl border border-gold-200 bg-white focus:border-gold-500 outline-none transition">
+                                    <option value="">Selecciona una opción</option>
+                                    <option>Brackets Estéticos de Zafiro</option>
+                                    <option>Alineadores Invisibles</option>
+                                    <option>Brackets Autoligables</option>
+                                    <option>Brackets Metálicos</option>
+                                    <option>Ortopedia Maxilar para Niños</option>
+                                    <option>Evaluación General</option>
+                                </select>
+                            </div>
+                            <div class="mb-6">
+                                <label class="block text-xs font-semibold uppercase text-gray-600 mb-1">Consulta o horario de preferencia</label>
+                                <textarea id="contactMessage" rows="3" class="w-full px-4 py-3 rounded-xl border border-gold-200 bg-white focus:border-gold-500 outline-none transition resize-none"></textarea>
+                            </div>
+                            <button type="submit" class="w-full gradient-gold text-white py-4 rounded-xl font-bold hover:opacity-95 shadow-md transition">
+                                <i class="fas fa-paper-plane mr-2"></i>Enviar Solicitud
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Footer -->
+        <footer class="bg-obsidian text-white py-12 border-t border-gold-900">
+            <div class="max-w-7xl mx-auto px-4 flex flex-col items-center text-center">
+                <img src="./logo.png" alt="Prisma Dental Studio" class="w-16 h-16 object-contain mb-3 bg-white p-1.5 rounded-xl">
+                <p class="font-bold tracking-widest text-gold-300 text-sm">PRISMA DENTAL STUDIO</p>
+                <p class="text-xs text-gray-400 italic font-serif mb-4">by Erika Magaly Choque</p>
+                <p class="text-xs text-gray-500">© <span id="currentYear"></span> Prisma Dental Studio by Erika Magaly Choque. Todos los derechos reservados. | Arequipa, Perú</p>
+            </div>
+        </footer>
+
+        <!-- WhatsApp Float -->
+        <a href="https://wa.me/51950381224" target="_blank" class="fixed bottom-6 right-6 w-15 h-15 p-4 bg-green-500 rounded-full flex items-center justify-center shadow-2xl hover:bg-green-600 transition z-50 hover:scale-110">
+            <i class="fab fa-whatsapp text-white text-3xl"></i>
+        </a>
+    </div>
+
+    <!-- BACKOFFICE LOGIN MODAL -->
+    <div id="loginModal" class="hidden fixed inset-0 bg-black/70 z-[100] flex items-center justify-center p-4 modal-overlay" onclick="if(event.target===this) hideLoginModal()">
+        <div class="bg-white rounded-3xl shadow-2xl max-w-md w-full p-8 fade-in border border-gold-200">
+            <div class="text-center mb-6">
+                <div class="w-20 h-20 mx-auto flex items-center justify-center mb-3">
+                    <img src="./logo.png" alt="Prisma Dental Studio" class="w-full h-full object-contain">
+                </div>
+                <h3 class="text-xl font-bold text-obsidian">Gestor Web Prisma</h3>
+                <p class="text-xs text-gray-500">Administración de Pop-ups, Casos y Reseñas</p>
+            </div>
+            <form onsubmit="handleLogin(event)">
+                <div class="mb-4">
+                    <label class="block text-xs font-semibold uppercase text-gray-600 mb-1">Usuario</label>
+                    <input type="text" id="loginUser" class="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-gold-500 outline-none" required>
+                </div>
+                <div class="mb-6">
+                    <label class="block text-xs font-semibold uppercase text-gray-600 mb-1">Contraseña</label>
+                    <input type="password" id="loginPass" class="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-gold-500 outline-none" required>
+                </div>
+                <button type="submit" class="w-full gradient-gold text-white py-3.5 rounded-xl font-bold hover:opacity-95 transition shadow-md">
+                    <i class="fas fa-sign-in-alt mr-2"></i>Ingresar al Gestor Web
+                </button>
+                <button type="button" onclick="hideLoginModal()" class="w-full mt-3 text-gray-500 py-2 text-sm hover:text-gray-700 transition">Cancelar</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- BACKOFFICE PANEL (SOLO GESTIÓN WEB) -->
+    <div id="backoffice" class="hidden">
+        <div class="flex min-h-screen">
+            <aside id="adminSidebar" class="w-64 bg-obsidian text-white fixed h-full overflow-y-auto z-40 -translate-x-full lg:translate-x-0 transition-transform duration-300 border-r border-gold-900/40">
+                <div class="p-6 border-b border-gray-800">
+                    <div class="flex items-center gap-3">
+                        <div class="w-11 h-11 bg-white rounded-xl p-1 flex items-center justify-center">
+                            <img src="./logo.png" alt="Logo Prisma" class="w-full h-full object-contain">
+                        </div>
+                        <div>
+                            <h5 class="font-bold text-sm text-gold-300 tracking-wide">PRISMA WEB</h5>
+                            <p class="text-[11px] text-gray-400">by Erika Magaly Choque</p>
+                        </div>
+                    </div>
+                </div>
+                <nav class="p-4 space-y-1.5">
+                    <div class="px-4 py-2 text-[11px] font-bold text-gold-400 uppercase tracking-wider">Contenido del Sitio</div>
+                    
+                    <button onclick="showSection('promotions')" class="sidebar-btn w-full flex items-center gap-3 px-4 py-3 rounded-xl text-gray-300 hover:bg-white/5 transition text-sm sidebar-active" data-section="promotions">
+                        <i class="fas fa-bullhorn w-5"></i> Promociones (Pop-ups)
+                    </button>
+                    <button onclick="showSection('gallery')" class="sidebar-btn w-full flex items-center gap-3 px-4 py-3 rounded-xl text-gray-300 hover:bg-white/5 transition text-sm" data-section="gallery">
+                        <i class="fas fa-images w-5"></i> Antes y Después / Fotos
+                    </button>
+                    <button onclick="showSection('testimonials')" class="sidebar-btn w-full flex items-center gap-3 px-4 py-3 rounded-xl text-gray-300 hover:bg-white/5 transition text-sm" data-section="testimonials">
+                        <i class="fab fa-google w-5"></i> Reseñas (Google Business)
+                    </button>
+                    <button onclick="showSection('messages')" class="sidebar-btn w-full flex items-center gap-3 px-4 py-3 rounded-xl text-gray-300 hover:bg-white/5 transition text-sm" data-section="messages">
+                        <i class="fas fa-envelope w-5"></i> Mensajes Web
+                    </button>
+
+                    <div class="border-t border-gray-800 my-4"></div>
+                    <button onclick="exitBackoffice()" class="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-gold-300 hover:bg-white/5 transition text-sm">
+                        <i class="fas fa-external-link-alt w-5"></i> Volver al Sitio Público
+                    </button>
+                </nav>
+            </aside>
+
+            <main class="lg:ml-64 flex-1 bg-gold-50 min-h-screen">
+                <header class="bg-white shadow-sm px-8 py-4 flex justify-between items-center sticky top-0 z-30 border-b border-gold-200/60">
+                    <div class="flex items-center gap-3">
+                        <button onclick="toggleAdminSidebar()" class="lg:hidden text-obsidian"><i class="fas fa-bars text-xl"></i></button>
+                        <h2 class="text-lg font-bold text-obsidian" id="sectionTitle">Gestión de Promociones y Pop-ups</h2>
+                    </div>
+                    <span class="text-xs font-medium text-gold-700 bg-gold-100 px-3 py-1.5 rounded-full">CMS Prisma Dental Studio</span>
+                </header>
+
+                <!-- SECCIÓN 1: PROMOCIONES (POP-UPS) -->
+                <section id="section-promotions" class="p-8 fade-in">
+                    <div class="flex flex-wrap justify-between items-center gap-4 mb-6">
+                        <div>
+                            <h3 class="text-lg font-bold text-obsidian">Pop-ups y Mención Casual de Promociones</h3>
+                            <p class="text-xs text-gray-500">La promoción que marques como "Activa" aparecerá al abrir la web y en el botón flotante de promoción vigente.</p>
+                        </div>
+                        <button onclick="showPromoForm()" class="gradient-gold text-white px-6 py-2.5 rounded-xl font-semibold shadow-sm hover:opacity-95 transition">
+                            <i class="fas fa-plus mr-1.5"></i> Subir Nueva Promo
+                        </button>
+                    </div>
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" id="promosGrid"></div>
+                </section>
+
+                <!-- SECCIÓN 2: ANTES Y DESPUÉS / GALERÍA WEB -->
+                <section id="section-gallery" class="p-8 hidden fade-in">
+                    <div class="flex flex-wrap justify-between items-center gap-4 mb-6">
+                        <div>
+                            <h3 class="text-lg font-bold text-obsidian">Casos Antes y Después / Imágenes de la Web</h3>
+                            <p class="text-xs text-gray-500">Sube casos comparativos (Antes y Después) o actualiza las fotografías principales del sitio web.</p>
+                        </div>
+                        <button onclick="showGalleryForm()" class="gradient-gold text-white px-6 py-2.5 rounded-xl font-semibold shadow-sm hover:opacity-95 transition">
+                            <i class="fas fa-upload mr-1.5"></i> Subir Caso o Foto
+                        </button>
+                    </div>
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" id="galleryGrid"></div>
+                </section>
+
+                <!-- SECCIÓN 3: TESTIMONIOS (ESTILO GOOGLE BUSINESS) -->
+                <section id="section-testimonials" class="p-8 hidden fade-in">
+                    <div class="flex flex-wrap justify-between items-center gap-4 mb-6">
+                        <div>
+                            <h3 class="text-lg font-bold text-obsidian">Reseñas de Google Business</h3>
+                            <p class="text-xs text-gray-500">Agrega las reseñas reales de tus pacientes de Google Maps para mostrarlas con el sello verificado de Google.</p>
+                        </div>
+                        <button onclick="showTestimonialForm()" class="gradient-gold text-white px-6 py-2.5 rounded-xl font-semibold shadow-sm hover:opacity-95 transition">
+                            <i class="fab fa-google mr-1.5"></i> Añadir Reseña de Google
+                        </button>
+                    </div>
+                    <div class="bg-white rounded-2xl shadow-sm overflow-hidden border border-gold-200/60">
+                        <table class="w-full text-sm">
+                            <thead>
+                                <tr class="bg-gold-100/60 text-left text-obsidian">
+                                    <th class="p-4">Paciente</th>
+                                    <th class="p-4">Tratamiento / Fecha</th>
+                                    <th class="p-4">Comentario en Google</th>
+                                    <th class="p-4">Visible</th>
+                                    <th class="p-4">Acciones</th>
+                                </tr>
+                            </thead>
+                            <tbody id="testimonialsTableBody"></tbody>
+                        </table>
+                    </div>
+                </section>
+
+                <!-- SECCIÓN 4: MENSAJES DEL FORMULARIO WEB -->
+                <section id="section-messages" class="p-8 hidden fade-in">
+                    <div class="mb-6">
+                        <h3 class="text-lg font-bold text-obsidian">Solicitudes de Cita desde la Web</h3>
+                        <p class="text-xs text-gray-500">Mensajes enviados por pacientes interesados a través del formulario de contacto.</p>
+                    </div>
+                    <div class="bg-white rounded-2xl shadow-sm overflow-hidden p-6 border border-gold-200/60" id="messagesList"></div>
+                </section>
+            </main>
+        </div>
+    </div>
+
+    <!-- MODALS DE GESTIÓN WEB -->
+
+    <!-- Modal: Subir Caso (Antes y Después) o Foto Web -->
+    <div id="galleryModal" class="hidden fixed inset-0 bg-black/60 z-[100] flex items-center justify-center p-4 modal-overlay" onclick="if(event.target===this) closeModal('galleryModal')">
+        <div class="bg-white rounded-3xl shadow-2xl max-w-2xl w-full p-8 fade-in max-h-[92vh] overflow-y-auto">
+            <h3 class="text-xl font-bold text-obsidian mb-2">Subir Caso Antes y Después / Foto Web</h3>
+            <p class="text-xs text-gray-500 mb-6">Para Casos de Éxito puedes subir una foto de "Antes" y otra de "Después", o una sola imagen ya combinada.</p>
+            <form onsubmit="saveGalleryImage(event)">
+                <input type="hidden" id="gId">
+                <input type="hidden" id="gBase64">
+                <input type="hidden" id="gBeforeBase64">
+
+                <label class="block text-xs font-semibold uppercase text-gray-600 mb-1">Tipo de Publicación</label>
+                <select id="gCategory" onchange="toggleBeforeAfterInputs()" class="w-full px-4 py-2.5 rounded-xl border border-gray-200 mb-4">
+                    <option value="Caso de Éxito">Caso de Éxito (Antes y Después)</option>
+                    <option value="Inicio (Principal)">Foto Principal de Inicio (Hero)</option>
+                    <option value="Sobre Mí">Foto Sección Dra. Erika Choque</option>
+                </select>
+
+                <label class="block text-xs font-semibold uppercase text-gray-600 mb-1">Título del Caso o Descripción *</label>
+                <input type="text" id="gTitle" placeholder="Ej: Alineación con Brackets de Zafiro - 14 meses" required class="w-full px-4 py-2.5 rounded-xl border border-gray-200 mb-4">
+
+                <!-- Bloque Foto ANTES (Opcional para Casos de Éxito) -->
+                <div id="beforeUploadBlock" class="mb-4">
+                    <label class="block text-xs font-semibold uppercase text-gray-600 mb-1">Foto del ANTES (Opcional si subes foto doble)</label>
+                    <div class="border-2 border-dashed border-gold-300 rounded-xl p-4 text-center hover:bg-gold-50 transition cursor-pointer" onclick="document.getElementById('gBeforeFile').click()">
+                        <i class="fas fa-camera text-2xl text-gold-600 mb-1"></i>
+                        <p class="text-xs font-medium text-gray-700" id="gBeforeFileName">Click para seleccionar foto del ANTES</p>
+                        <input type="file" id="gBeforeFile" accept="image/*" class="hidden" onchange="handleImageUpload(event, 'gBeforeFileName', 'gBeforeBase64', 800)">
+                    </div>
+                </div>
+
+                <!-- Bloque Foto DESPUÉS o Imagen Principal -->
+                <div class="mb-4">
+                    <label class="block text-xs font-semibold uppercase text-gray-600 mb-1" id="afterUploadLabel">Foto del DESPUÉS (o Imagen Completa) *</label>
+                    <div class="border-2 border-dashed border-gold-400 rounded-xl p-5 text-center hover:bg-gold-50 transition cursor-pointer" onclick="document.getElementById('gFile').click()">
+                        <i class="fas fa-cloud-upload-alt text-3xl text-gold-600 mb-1"></i>
+                        <p class="text-sm font-medium text-gray-700" id="gFileName">Click para subir imagen desde tu PC</p>
+                        <input type="file" id="gFile" accept="image/*" class="hidden" onchange="handleImageUpload(event, 'gFileName', 'gBase64', 800)">
+                    </div>
+                </div>
+
+                <div class="flex gap-3 mt-6">
+                    <button type="submit" class="flex-1 gradient-gold text-white py-3 rounded-xl font-bold">Publicar en la Web</button>
+                    <button type="button" onclick="closeModal('galleryModal')" class="px-6 py-3 border rounded-xl text-gray-600">Cancelar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Modal: Promoción / Pop-up -->
+    <div id="promoModal" class="hidden fixed inset-0 bg-black/60 z-[100] flex items-center justify-center p-4 modal-overlay" onclick="if(event.target===this) closeModal('promoModal')">
+        <div class="bg-white rounded-3xl shadow-2xl max-w-lg w-full p-8 fade-in">
+            <h3 class="text-xl font-bold text-obsidian mb-6">Configurar Promoción Activa</h3>
+            <form onsubmit="savePromo(event)">
+                <input type="hidden" id="prId">
+                <input type="hidden" id="prBase64">
+                <label class="block text-xs font-semibold uppercase text-gray-600 mb-1">Título de la Promoción *</label>
+                <input type="text" id="prTitle" placeholder="Ej: 20% Dscto. en Brackets de Zafiro este mes" required class="w-full px-4 py-2.5 rounded-xl border border-gray-200 mb-4">
+                
+                <div class="mb-4 border-2 border-dashed border-gold-400 rounded-xl p-6 text-center hover:bg-gold-50 transition cursor-pointer" onclick="document.getElementById('prFile').click()">
+                    <i class="fas fa-image text-3xl text-gold-600 mb-2"></i>
+                    <p class="text-sm font-medium text-gray-700" id="prFileName">Sube el afiche o diseño de la promoción</p>
+                    <input type="file" id="prFile" accept="image/*" class="hidden" onchange="handleImageUpload(event, 'prFileName', 'prBase64', 700)">
+                </div>
+
+                <div class="flex items-center gap-3 mb-6 bg-gold-50 p-4 rounded-xl border border-gold-200">
+                    <label class="relative inline-flex items-center cursor-pointer">
+                        <input type="checkbox" id="prActive" class="sr-only peer" checked>
+                        <div class="w-11 h-6 bg-gray-300 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-gold-600"></div>
+                        <span class="ml-3 text-sm font-bold text-obsidian">Mostrar como Promoción Principal Activa</span>
+                    </label>
+                </div>
+                <div class="flex gap-3">
+                    <button type="submit" class="flex-1 gradient-gold text-white py-3 rounded-xl font-bold transition">Guardar Promoción</button>
+                    <button type="button" onclick="closeModal('promoModal')" class="px-6 py-3 border rounded-xl text-gray-600">Cancelar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Modal: Reseña de Google Business -->
+    <div id="testimonialModal" class="hidden fixed inset-0 bg-black/60 z-[100] flex items-center justify-center p-4 modal-overlay" onclick="if(event.target===this) closeModal('testimonialModal')">
+        <div class="bg-white rounded-3xl shadow-2xl max-w-lg w-full p-8 fade-in">
+            <div class="flex items-center gap-2 mb-4">
+                <i class="fab fa-google text-xl text-gold-600"></i>
+                <h3 class="text-xl font-bold text-obsidian">Añadir Reseña de Google Business</h3>
+            </div>
+            <form onsubmit="saveTestimonial(event)">
+                <input type="hidden" id="tId">
+                <label class="block text-xs font-semibold uppercase text-gray-600 mb-1">Nombre del Paciente (como sale en Google) *</label>
+                <input type="text" id="tName" placeholder="Ej: Andrea Paredes" required class="w-full px-4 py-2.5 rounded-xl border border-gray-200 mb-4">
+                
+                <label class="block text-xs font-semibold uppercase text-gray-600 mb-1">Detalle / Tratamiento o Antigüedad *</label>
+                <input type="text" id="tTreatment" placeholder="Ej: Reseña en Google · Ortodoncia Estética" required class="w-full px-4 py-2.5 rounded-xl border border-gray-200 mb-4">
+                
+                <label class="block text-xs font-semibold uppercase text-gray-600 mb-1">Texto de la Reseña *</label>
+                <textarea id="tText" rows="3" placeholder="Pega aquí el comentario que dejó el paciente en Google Maps..." required class="w-full px-4 py-2.5 rounded-xl border border-gray-200 mb-4"></textarea>
+                
+                <div class="grid grid-cols-2 gap-4 mb-6">
+                    <div>
+                        <label class="block text-xs font-semibold uppercase text-gray-600 mb-1">Estrellas</label>
+                        <select id="tRating" class="w-full px-4 py-2.5 rounded-xl border border-gray-200">
+                            <option value="5">5 Estrellas (★★★★★)</option>
+                            <option value="4">4 Estrellas (★★★★)</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-xs font-semibold uppercase text-gray-600 mb-1">Estado</label>
+                        <select id="tVisible" class="w-full px-4 py-2.5 rounded-xl border border-gray-200">
+                            <option value="true">Visible en la Web</option>
+                            <option value="false">Oculto</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="flex gap-3">
+                    <button type="submit" class="flex-1 gradient-gold text-white py-3 rounded-xl font-bold">Guardar Reseña</button>
+                    <button type="button" onclick="closeModal('testimonialModal')" class="px-6 py-3 border rounded-xl text-gray-600">Cancelar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Toast Notification -->
+    <div id="toast" class="hidden fixed top-6 right-6 bg-obsidian text-white px-6 py-3.5 rounded-xl shadow-2xl z-[250] flex items-center gap-3 fade-in border border-gold-400">
+        <i class="fas fa-check-circle text-gold-400"></i><span id="toastMessage">Operación exitosa</span>
+    </div>
+
+    <!-- FIREBASE MODULE -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+        import { getFirestore, collection, addDoc, getDocs, updateDoc, deleteDoc, doc, onSnapshot } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyAyxf5QGIUULFO03-1qHkvAhF8EVAE_s3E",
+            authDomain: "draerikachoque-web.firebaseapp.com",
+            projectId: "draerikachoque-web",
+            storageBucket: "draerikachoque-web.firebasestorage.app",
+            messagingSenderId: "77346797540",
+            appId: "1:77346797540:web:533583bf797b4596f3b9f1"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        window.db = getFirestore(app);
+        
+        window.fbCollection = collection;
+        window.fbAddDoc = addDoc;
+        window.fbGetDocs = getDocs;
+        window.fbUpdateDoc = updateDoc;
+        window.fbDeleteDoc = deleteDoc;
+        window.fbDoc = doc;
+        window.fbOnSnapshot = onSnapshot;
+
+        // 1. Escuchar Reseñas estilo Google Business
+        window.listenPublicTestimonials = function() {
+            onSnapshot(collection(window.db, "testimonials"), (snapshot) => {
+                const container = document.getElementById('publicTestimonials');
+                let html = '';
+                snapshot.forEach(doc => {
+                    const t = doc.data();
+                    if (t.visible) {
+                        html += `
+                        <div class="bg-white text-obsidian rounded-2xl p-6 shadow-xl border border-gold-200/80 flex flex-col justify-between">
+                            <div>
+                                <div class="flex justify-between items-start mb-4">
+                                    <div class="flex items-center gap-3">
+                                        <div class="w-11 h-11 rounded-full gradient-gold flex items-center justify-center text-white font-bold text-lg shadow">
+                                            ${t.name ? t.name.charAt(0).toUpperCase() : 'P'}
+                                        </div>
+                                        <div>
+                                            <p class="font-bold text-obsidian text-sm">${t.name}</p>
+                                            <p class="text-gray-500 text-xs">${t.treatment || 'Reseña en Google'}</p>
+                                        </div>
+                                    </div>
+                                    <i class="fab fa-google text-lg text-gold-600" title="Reseña de Google Business"></i>
+                                </div>
+                                <div class="flex items-center gap-1 mb-3 text-yellow-400 text-xs">
+                                    ${'<i class="fas fa-star"></i>'.repeat(t.rating || 5)}
+                                    <span class="text-[11px] text-gray-400 ml-1 font-medium">Verificada</span>
+                                </div>
+                                <p class="text-gray-600 text-sm leading-relaxed italic">"${t.text}"</p>
+                            </div>
+                        </div>`;
+                    }
+                });
+                container.innerHTML = html || '<p class="text-gold-200 text-center col-span-3">Próximamente más reseñas de Google Business.</p>';
+            });
+        };
+
+        // 2. Escuchar Casos de Éxito (Antes y Después) y Fotos Principales
+        window.listenPublicImagesAndCases = function() {
+            onSnapshot(collection(window.db, "gallery"), (snapshot) => {
+                const container = document.getElementById('publicCases');
+                let htmlCases = '';
+                
+                snapshot.forEach(doc => {
+                    const img = doc.data();
+                    if (img.category === 'Inicio (Principal)' && img.url) {
+                        document.getElementById('heroImage').src = img.url; 
+                    } 
+                    else if (img.category === 'Sobre Mí' && img.url) {
+                        document.getElementById('aboutImage').src = img.url;
+                    } 
+                    else if (img.category === 'Caso de Éxito') {
+                        if (img.beforeUrl) {
+                            htmlCases += `
+                            <div class="rounded-3xl overflow-hidden shadow-md card-hover bg-white border border-gold-200/80">
+                                <div class="grid grid-cols-2 gap-0.5 bg-gold-200">
+                                    <div class="relative">
+                                        <img src="${img.beforeUrl}" alt="Antes - ${img.title}" class="w-full h-56 object-cover">
+                                        <span class="absolute bottom-2 left-2 bg-obsidian/80 text-white text-[10px] font-bold uppercase px-2.5 py-1 rounded-md">Antes</span>
+                                    </div>
+                                    <div class="relative">
+                                        <img src="${img.url}" alt="Después - ${img.title}" class="w-full h-56 object-cover">
+                                        <span class="absolute bottom-2 right-2 gradient-gold text-white text-[10px] font-bold uppercase px-2.5 py-1 rounded-md shadow">Después</span>
+                                    </div>
+                                </div>
+                                <div class="p-5">
+                                    <span class="text-[10px] font-bold uppercase tracking-widest text-gold-600 block mb-1">Prisma Dental Studio</span>
+                                    <h5 class="font-bold text-obsidian text-base">${img.title}</h5>
+                                </div>
+                            </div>`;
+                        } else {
+                            htmlCases += `
+                            <div class="rounded-3xl overflow-hidden shadow-md card-hover bg-white border border-gold-200/80">
+                                <div class="relative">
+                                    <img src="${img.url}" alt="${img.title}" class="w-full h-60 object-cover">
+                                    <span class="absolute bottom-3 right-3 gradient-gold text-white text-[10px] font-bold uppercase px-3 py-1 rounded-full shadow">Antes y Después</span>
+                                </div>
+                                <div class="p-5">
+                                    <span class="text-[10px] font-bold uppercase tracking-widest text-gold-600 block mb-1">Prisma Dental Studio</span>
+                                    <h5 class="font-bold text-obsidian text-base">${img.title}</h5>
+                                </div>
+                            </div>`;
+                        }
+                    }
+                });
+                container.innerHTML = htmlCases || '<p class="text-gray-500 text-center col-span-3">Próximamente nuevos casos de Antes y Después.</p>';
+            });
+        };
+
+        // 3. Escuchar Promoción Activa (Pop-up + Banner Casual Flotante)
+        window.listenPublicPromos = function() {
+            onSnapshot(collection(window.db, "promotions"), (snapshot) => {
+                let activePromo = null;
+                snapshot.forEach(doc => {
+                    if (doc.data().active) activePromo = doc.data();
+                });
+
+                const casualBanner = document.getElementById('casualPromoBanner');
+                if (activePromo) {
+                    document.getElementById('promoImage').src = activePromo.url;
+                    document.getElementById('promoTitleModal').textContent = activePromo.title || 'Promoción Especial';
+                    document.getElementById('casualPromoText').textContent = activePromo.title || 'Ver promoción activa';
+                    document.getElementById('promoWaLink').href = `https://wa.me/51950381224?text=${encodeURIComponent('Hola Prisma Dental Studio, deseo información sobre la promoción: ' + activePromo.title)}`;
+                    
+                    // Mostrar siempre el recordatorio casual en la esquina inferior
+                    casualBanner.classList.remove('hidden');
+
+                    // Si aún no vio el pop-up en esta sesión, mostrarlo automáticamente
+                    if (!sessionStorage.getItem('promoVisto')) {
+                        document.getElementById('publicPromoModal').classList.remove('hidden');
+                        sessionStorage.setItem('promoVisto', 'true');
+                    }
+                } else {
+                    casualBanner.classList.add('hidden');
+                    document.getElementById('publicPromoModal').classList.add('hidden');
+                }
+            });
+        };
+
+        window.listenPublicTestimonials();
+        window.listenPublicImagesAndCases();
+        window.listenPublicPromos();
+    </script>
+
+    <!-- MAIN LOGIC (JS) -->
+    <script>
+        document.getElementById('currentYear').textContent = new Date().getFullYear();
+
+        function openPromoModal() {
+            document.getElementById('publicPromoModal').classList.remove('hidden');
+        }
+        function closePromoModal() {
+            document.getElementById('publicPromoModal').classList.add('hidden');
+        }
+
+        window.handleImageUpload = function(event, labelId, hiddenInputId, maxWidth) {
+            const file = event.target.files[0];
+            if (!file) return;
+            document.getElementById(labelId).textContent = "Procesando imagen: " + file.name + "...";
+            const reader = new FileReader();
+            reader.readAsDataURL(file);
+            reader.onload = (e) => {
+                const img = new Image();
+                img.src = e.target.result;
+                img.onload = () => {
+                    const canvas = document.createElement('canvas');
+                    let width = img.width;
+                    let height = img.height;
+                    if (width > maxWidth) { height *= maxWidth / width; width = maxWidth; }
+                    canvas.width = width;
+                    canvas.height = height;
+                    const ctx = canvas.getContext('2d');
+                    ctx.drawImage(img, 0, 0, width, height);
+                    const base64Str = canvas.toDataURL('image/jpeg', 0.78);
+                    document.getElementById(hiddenInputId).value = base64Str;
+                    document.getElementById(labelId).innerHTML = `<span class="text-green-600 font-semibold"><i class="fas fa-check"></i> Imagen lista para publicar</span>`;
+                };
+            };
+        };
+
+        function toggleBeforeAfterInputs() {
+            const category = document.getElementById('gCategory').value;
+            const beforeBlock = document.getElementById('beforeUploadBlock');
+            const afterLabel = document.getElementById('afterUploadLabel');
+            if (category === 'Caso de Éxito') {
+                beforeBlock.classList.remove('hidden');
+                afterLabel.textContent = 'Foto del DESPUÉS (o Imagen Combinada) *';
+            } else {
+                beforeBlock.classList.add('hidden');
+                afterLabel.textContent = 'Seleccionar Fotografía *';
+            }
+        }
+
+        function showToast(message, type = 'success') {
+            const toast = document.getElementById('toast');
+            document.getElementById('toastMessage').textContent = message;
+            toast.classList.remove('hidden');
+            setTimeout(() => toast.classList.add('hidden'), 3000);
+        }
+
+        function closeModal(id) { document.getElementById(id).classList.add('hidden'); }
+        function toggleMobileMenu() { document.getElementById('mobileMenu').classList.toggle('hidden'); }
+        function toggleAdminSidebar() { document.getElementById('adminSidebar').classList.toggle('-translate-x-full'); }
+        function showBackofficeLogin() { document.getElementById('loginModal').classList.remove('hidden'); }
+        function hideLoginModal() { document.getElementById('loginModal').classList.add('hidden'); }
+
+        function handleLogin(e) {
+            e.preventDefault();
+            const user = document.getElementById('loginUser').value;
+            const pass = document.getElementById('loginPass').value;
+            if (user === 'admin' && pass === 'admin123') { 
+                hideLoginModal();
+                document.getElementById('publicSite').classList.add('hidden');
+                document.getElementById('backoffice').classList.remove('hidden');
+                showSection('promotions');
+                showToast('Bienvenido al Gestor Web de Prisma Dental Studio');
+                window.scrollTo(0, 0);
+                document.getElementById('loginUser').value = '';
+                document.getElementById('loginPass').value = '';
+            } else {
+                showToast('Credenciales incorrectas', 'error');
+            }
+        }
+
+        function exitBackoffice() {
+            document.getElementById('backoffice').classList.add('hidden');
+            document.getElementById('publicSite').classList.remove('hidden');
+            window.scrollTo(0, 0);
+        }
+
+        function showSection(section) {
+            document.querySelectorAll('[id^="section-"]').forEach(s => s.classList.add('hidden'));
+            document.getElementById(`section-${section}`).classList.remove('hidden');
+            document.querySelectorAll('.sidebar-btn').forEach(btn => btn.classList.remove('sidebar-active'));
+            const btn = document.querySelector(`[data-section="${section}"]`);
+            if (btn) btn.classList.add('sidebar-active');
+
+            const titles = {
+                promotions: 'Gestión de Promociones y Pop-ups',
+                gallery: 'Casos Antes y Después / Fotos Web',
+                testimonials: 'Reseñas de Google Business',
+                messages: 'Mensajes de Contacto Web'
+            };
+            document.getElementById('sectionTitle').textContent = titles[section] || 'Gestión Web';
+
+            if (section === 'promotions') loadPromotions();
+            if (section === 'gallery') loadGallery();
+            if (section === 'testimonials') loadTestimonialsAdmin();
+            if (section === 'messages') loadMessages();
+        }
+
+        async function fetchCollection(collectionName) {
+            try {
+                const snap = await window.fbGetDocs(window.fbCollection(window.db, collectionName));
+                return snap.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+            } catch(e) { return []; }
+        }
+        
+        window.deleteDoc = async function(collection, id) {
+            if (!confirm('¿Seguro de eliminar este elemento de la web?')) return;
+            await window.fbDeleteDoc(window.fbDoc(window.db, collection, id));
+            showToast('Eliminado correctamente');
+            if (collection === 'gallery') loadGallery();
+            if (collection === 'promotions') loadPromotions();
+            if (collection === 'testimonials') loadTestimonialsAdmin();
+            if (collection === 'messages') loadMessages();
+        };
+
+        // --- GESTIÓN DE ANTES Y DESPUÉS / GALERÍA ---
+        async function loadGallery() {
+            const gallery = await fetchCollection('gallery');
+            document.getElementById('galleryGrid').innerHTML = gallery.map(g => `
+                <div class="rounded-2xl overflow-hidden shadow-md bg-white border border-gold-200 flex flex-col justify-between">
+                    ${g.beforeUrl ? `
+                        <div class="grid grid-cols-2 gap-0.5 bg-gray-200">
+                            <img src="${g.beforeUrl}" class="w-full h-36 object-cover" title="Antes">
+                            <img src="${g.url}" class="w-full h-36 object-cover" title="Después">
+                        </div>
+                    ` : `<img src="${g.url}" class="w-full h-40 object-cover">`}
+                    <div class="p-4 flex flex-col justify-between">
+                        <div>
+                            <span class="text-[10px] font-bold text-gold-600 uppercase mb-1 block">${g.category}</span>
+                            <h5 class="text-sm font-bold text-obsidian truncate" title="${g.title}">${g.title}</h5>
+                        </div>
+                        <button onclick="window.deleteDoc('gallery', '${g.id}')" class="text-red-500 hover:bg-red-50 transition rounded-lg text-xs mt-3 py-2 font-bold w-full border border-red-100">
+                            <i class="fas fa-trash mr-1"></i> Eliminar
+                        </button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function showGalleryForm() { 
+            document.getElementById('gId').value = '';
+            document.getElementById('gTitle').value = '';
+            document.getElementById('gBase64').value = '';
+            document.getElementById('gBeforeBase64').value = '';
+            document.getElementById('gFileName').innerHTML = 'Click para subir imagen desde tu PC';
+            document.getElementById('gBeforeFileName').innerHTML = 'Click para seleccionar foto del ANTES';
+            document.getElementById('gFile').value = '';
+            document.getElementById('gBeforeFile').value = '';
+            toggleBeforeAfterInputs();
+            document.getElementById('galleryModal').classList.remove('hidden'); 
+        }
+
+        async function saveGalleryImage(e) {
+            e.preventDefault();
+            const base64Str = document.getElementById('gBase64').value;
+            const beforeBase64Str = document.getElementById('gBeforeBase64').value;
+            if (!base64Str) { showToast('Por favor, selecciona la imagen principal o del Después.', 'error'); return; }
+
+            const data = {
+                title: document.getElementById('gTitle').value,
+                category: document.getElementById('gCategory').value,
+                url: base64Str,
+                beforeUrl: beforeBase64Str || null
+            };
+            
+            await window.fbAddDoc(window.fbCollection(window.db, 'gallery'), data);
+            closeModal('galleryModal');
+            loadGallery();
+            showToast('Caso / Imagen publicada en la web');
+        }
+
+        // --- GESTIÓN DE PROMOCIONES (POP-UPS) ---
+        async function loadPromotions() {
+            const promos = await fetchCollection('promotions');
+            document.getElementById('promosGrid').innerHTML = promos.map(pr => `
+                <div class="rounded-2xl overflow-hidden shadow-md bg-white border border-gold-200 flex flex-col relative">
+                    ${pr.active ? '<div class="absolute top-3 right-3 gradient-gold text-white text-xs px-3 py-1 rounded-full shadow-lg font-bold"><i class="fas fa-check-circle mr-1"></i> Activa en Web</div>' : '<div class="absolute top-3 right-3 bg-gray-600 text-white text-xs px-3 py-1 rounded-full shadow font-bold">Inactiva</div>'}
+                    <div class="h-52 bg-neutral-900 flex justify-center p-2"><img src="${pr.url}" class="h-full object-contain"></div>
+                    <div class="p-4 bg-white flex flex-col gap-3">
+                        <h5 class="font-bold text-obsidian text-sm">${pr.title}</h5>
+                        <div class="flex justify-between items-center mt-1 border-t pt-3">
+                            <button onclick="togglePromoActive('${pr.id}', ${pr.active})" class="text-xs font-bold px-3 py-1.5 rounded-lg ${pr.active ? 'bg-gray-100 text-gray-600' : 'bg-gold-100 text-gold-800'}">
+                                ${pr.active ? 'Desactivar' : '<i class="fas fa-bolt mr-1"></i> Activar como Principal'}
+                            </button>
+                            <button onclick="window.deleteDoc('promotions', '${pr.id}')" class="text-red-500 text-xs font-semibold hover:underline"><i class="fas fa-trash"></i> Eliminar</button>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function showPromoForm() { 
+            document.getElementById('prId').value = '';
+            document.getElementById('prTitle').value = '';
+            document.getElementById('prBase64').value = ''; 
+            document.getElementById('prFileName').innerHTML = 'Sube el afiche o diseño de la promoción';
+            document.getElementById('prFile').value = ''; 
+            document.getElementById('promoModal').classList.remove('hidden'); 
+        }
+
+        async function savePromo(e) {
+            e.preventDefault();
+            const base64Str = document.getElementById('prBase64').value;
+            if (!base64Str) { showToast('Selecciona una imagen para la promoción', 'error'); return; }
+            const isActive = document.getElementById('prActive').checked;
+            if (isActive) {
+                const promos = await fetchCollection('promotions');
+                for (let p of promos) if (p.active) await window.fbUpdateDoc(window.fbDoc(window.db, 'promotions', p.id), { active: false });
+            }
+            const data = { title: document.getElementById('prTitle').value, active: isActive, url: base64Str };
+            await window.fbAddDoc(window.fbCollection(window.db, 'promotions'), data);
+            closeModal('promoModal');
+            loadPromotions();
+            showToast('Promoción guardada');
+        }
+
+        window.togglePromoActive = async function(id, currentState) {
+            if (!currentState) {
+                const promos = await fetchCollection('promotions');
+                for (let p of promos) if (p.active) await window.fbUpdateDoc(window.fbDoc(window.db, 'promotions', p.id), { active: false });
+            }
+            await window.fbUpdateDoc(window.fbDoc(window.db, 'promotions', id), { active: !currentState });
+            loadPromotions();
+            showToast('Estado de promoción actualizado');
+        };
+
+        // --- GESTIÓN DE TESTIMONIOS (GOOGLE REVIEWS) ---
+        async function loadTestimonialsAdmin() {
+            const tests = await fetchCollection('testimonials');
+            document.getElementById('testimonialsTableBody').innerHTML = tests.map(t => `
+                <tr class="border-b border-gray-100 hover:bg-gold-50/40">
+                    <td class="p-4 font-semibold text-obsidian">${t.name}</td>
+                    <td class="p-4 text-xs text-gray-500">${t.treatment || 'Google Maps'}</td>
+                    <td class="p-4 truncate max-w-xs text-gray-600">"${t.text}"</td>
+                    <td class="p-4"><span class="px-2.5 py-1 rounded-full text-xs font-semibold ${t.visible ? 'bg-green-100 text-green-700' : 'bg-gray-100 text-gray-500'}">${t.visible ? 'Visible' : 'Oculto'}</span></td>
+                    <td class="p-4"><button onclick="window.deleteDoc('testimonials', '${t.id}')" class="text-red-500 hover:text-red-700"><i class="fas fa-trash"></i></button></td>
+                </tr>
+            `).join('');
+        }
+
+        function showTestimonialForm() {
+            document.getElementById('tId').value = '';
+            document.getElementById('tName').value = '';
+            document.getElementById('tTreatment').value = 'Reseña en Google · Paciente Verificado';
+            document.getElementById('tText').value = '';
+            document.getElementById('testimonialModal').classList.remove('hidden');
+        }
+
+        async function saveTestimonial(e) {
+            e.preventDefault();
+            const data = {
+                name: document.getElementById('tName').value,
+                treatment: document.getElementById('tTreatment').value,
+                text: document.getElementById('tText').value,
+                rating: parseInt(document.getElementById('tRating').value),
+                visible: document.getElementById('tVisible').value === 'true'
+            };
+            await window.fbAddDoc(window.fbCollection(window.db, 'testimonials'), data);
+            closeModal('testimonialModal');
+            loadTestimonialsAdmin();
+            showToast('Reseña de Google publicada');
+        }
+
+        // --- FORMULARIO DE CONTACTO Y MENSAJES WEB ---
+        async function submitContactForm(e) {
+            e.preventDefault();
+            const data = {
+                firstName: document.getElementById('contactFirstName').value,
+                lastName: document.getElementById('contactLastName').value,
+                email: document.getElementById('contactEmail').value,
+                phone: document.getElementById('contactPhone').value,
+                treatment: document.getElementById('contactTreatment').value,
+                message: document.getElementById('contactMessage').value,
+                date: new Date().toLocaleDateString('es-PE'),
+                read: false
+            };
+            await window.fbAddDoc(window.fbCollection(window.db, 'messages'), data);
+            e.target.reset();
+            showToast('¡Solicitud enviada! Nos comunicaremos contigo pronto.');
+        }
+
+        async function loadMessages() {
+            const msgs = await fetchCollection('messages');
+            document.getElementById('messagesList').innerHTML = msgs.length ? msgs.map(m => `
+                <div class="p-4 border-b border-gray-100 hover:bg-gold-50/40 flex justify-between items-start gap-4">
+                    <div>
+                        <p class="font-bold text-sm text-obsidian">${m.firstName} ${m.lastName} <span class="text-xs font-normal text-gray-500">· Tel: ${m.phone}</span></p>
+                        <p class="text-xs font-semibold text-gold-700 mt-0.5">${m.treatment}</p>
+                        <p class="text-sm text-gray-600 mt-1 italic">"${m.message || 'Sin mensaje adicional'}"</p>
+                    </div>
+                    <div class="flex items-center gap-3">
+                        <a href="https://wa.me/51${(m.phone || '').replace(/\D/g,'')}" target="_blank" class="text-green-600 hover:text-green-700 text-sm font-semibold"><i class="fab fa-whatsapp"></i> Responder</a>
+                        <button onclick="window.deleteDoc('messages', '${m.id}')" class="text-red-500 text-xs hover:underline"><i class="fas fa-trash"></i></button>
+                    </div>
+                </div>
+            `).join('') : '<p class="text-gray-400 text-sm text-center py-4">No hay mensajes registrados.</p>';
+        }
+    </script>
+</body>
+</html>
